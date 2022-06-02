@@ -5,6 +5,8 @@ import App from "./App";
 import { makeServer } from "./server";
 import { ChakraProvider } from "@chakra-ui/react";
 import { extendTheme } from "@chakra-ui/react"
+import { Provider } from "react-redux";
+import {store} from './store'
 
 // Call make Server
 makeServer();
@@ -37,9 +39,12 @@ const borderRadius = {
 
 ReactDOM.render(
   <React.StrictMode>
+    <Provider store={store}>
     <ChakraProvider theme={theme} borderRadius={borderRadius}>
       <App />
     </ChakraProvider>
+    </Provider>
+   
   </React.StrictMode>,
   document.getElementById("root")
 );

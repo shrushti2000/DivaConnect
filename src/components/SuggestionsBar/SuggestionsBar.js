@@ -8,9 +8,6 @@ import {
   Text,
   Textarea,
 } from "@chakra-ui/react";
-import { Link } from "react-router-dom";
-import { Icon } from "@chakra-ui/react";
-import { MdHome, MdExplore, MdPerson, MdFeed } from "react-icons/md";
 
 const SuggestionsBar = () => {
   return (
