@@ -3,6 +3,7 @@ import "./PostCard.css";
 import {
   MdMoreHoriz,
   MdFavoriteBorder,
+  MdFavorite,
   MdBookmark,
   MdComment,
 } from "react-icons/md";
@@ -19,17 +20,40 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { EditPostModal } from "../EditPostModal/EditPostModal";
-import { deleteUserPost, setPostToBeEdited } from "../../features/postSlice";
+import {
+  deleteUserPost,
+  likeAndDislikePost,
+  setPostToBeEdited,
+} from "../../features/postSlice";
 import { useDispatch, useSelector } from "react-redux";
 const PostCard = ({ post, userDetails }) => {
   const { user } = useSelector((state) => state.authentication);
   const dispatch = useDispatch();
   const [showmodal, setShowModal] = useState("");
+  const {
+    _id,
+    content,
+    username,
+    likes: { likeCount, likedBy, dislikedBy },
+    bookmark,
+    comments,
+    createdAt,
+  } = post;
+  const isPostLiked = likedBy?.some((like) => like.username === user.username);
   const deletePostHandler = () => {
     dispatch(deleteUserPost(post._id));
   };
   const setPostToEdit = () => {
     dispatch(setPostToBeEdited(post));
+  };
+  const likePostHandler = () => {
+    dispatch(
+      likeAndDislikePost({
+        postId: post._id,
+        isLike: isPostLiked ? false : true,
+      })
+    );
+    console.log("like clisked");
   };
   return (
     <>
@@ -76,8 +100,29 @@ const PostCard = ({ post, userDetails }) => {
         <Flex>{post.content}</Flex>
         <Flex>
           <Flex m="5px">
-            <Icon fontSize="2xl" as={MdFavoriteBorder} m="5px" />
-            <Text fontSize="2xl">2</Text>
+            {isPostLiked ? (
+              <>
+                <Icon
+                  fontSize="2xl"
+                  color="brand.200"
+                  as={MdFavorite}
+                  m="5px"
+                  onClick={likePostHandler}
+                  cursor="pointer"
+                />
+              </>
+            ) : (
+              <>
+                <Icon
+                  fontSize="2xl"
+                  as={MdFavoriteBorder}
+                  m="5px"
+                  onClick={likePostHandler}
+                  cursor="pointer"
+                />
+              </>
+            )}
+            {likeCount !== 0 && <Text fontSize="2xl">{likeCount}</Text>}
           </Flex>
           <Flex m="5px">
             <Icon as={MdBookmark} m="5px" fontSize="2xl" />

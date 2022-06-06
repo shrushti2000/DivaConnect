@@ -25,3 +25,19 @@ export const deleteUserPostService=(postId,token)=>{
         }
     })
 }
+
+export const likePostService=(postId,token)=>{
+    axios.post(`/api/posts/like/${postId}`,{},{
+        headers:{
+            authorization:token
+        }
+    })
+}
+
+export const dislikePostService=(postId,token)=>{
+    axios.post(`/api/posts/dislike/${postId}`,{},{
+        headers:{
+            authorization:token
+        }
+    })
+}
