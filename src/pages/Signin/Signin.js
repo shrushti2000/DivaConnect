@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { loginUser } from "../../features/authenticationSlice";
 
 const Signin = () => {
+ 
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [userCredentials, setUserCredentials] = useState({
@@ -25,8 +26,9 @@ const Signin = () => {
   const signinHandler = () => {
     if (userCredentials.username && userCredentials.password !== "") {
       dispatch(loginUser(userCredentials));
-      navigate("/feedpage");
+    
     }
+     navigate("/feedpage");
   };
 
   return (

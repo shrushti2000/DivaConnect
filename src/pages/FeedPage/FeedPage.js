@@ -6,20 +6,70 @@ import {
   GridItem,
   Text,
   Textarea,
+  useToast,
+  
 } from "@chakra-ui/react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Icon } from "@chakra-ui/react";
 import { MdHome, MdExplore, MdPerson, MdFeed, MdImage } from "react-icons/md";
 import "./FeedPage.css";
-import { Sidebar, SuggestionsBar } from "../../components";
+import { EditPostModal, Sidebar, SuggestionsBar,Toast } from "../../components";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  addUserPost,
+  getAllPosts,
+  getUserPost,
+} from "../../features/postSlice";
+import { PostCard } from "../../components/PostCard/PostCard";
 
 const FeedPage = () => {
+  const { userPosts } = useSelector((state) => state.post);
+  const { user } = useSelector((state) => state.authentication);
+  const [showToast,setShowToast]=useState(false)
+  const dispatch = useDispatch();
+  const [postContent, setPostContent] = useState({
+    title:'',
+    content: "",
+    username: user.username,
+  });
+  console.log(userPosts);
+  useEffect(() => {
+    dispatch(getUserPost(user.username));
+  }, [userPosts]);
+const toast=useToast()
+  const submitPost = () => {
+    if (postContent.textContent !== "" && postContent.title!=='' ) {
+      dispatch(addUserPost(postContent));
+      toast({
+        title: `Post added succesfully`,
+        status:'success',
+        position: 'top',
+        isClosable: true,
+      })
+      setPostContent({...postContent,title:'',content:''})
+    }else{
+      toast({
+        title: `Please enter all the content`,
+        status:'error',
+        position: 'top',
+        isClosable: true,
+      })
+    }
+  };
+  const getSortedPosts=()=>{
+    return [...userPosts].sort(function(a,b){
+      return new Date(b['createdAt']) - new Date(a['createdAt']);
+    })
+  }
+  const sortedPosts=getSortedPosts()
+  console.log(sortedPosts)
   return (
     <>
-      <Grid templateColumns="repeat(4,1fr)" gap={3}>
+  
+      <Grid templateColumns="repeat(5,1fr)" gap={1}>
         <Sidebar />
-        <GridItem w="100%" colSpan={2}>
+        <GridItem w="100%" colSpan={3}>
           <Flex
             flexDirection="column"
             justifyContent="center"
@@ -39,21 +89,43 @@ const FeedPage = () => {
                 </Text>
               </Flex>
               <Textarea
-                placeholder="Here is a sample placeholder"
+                placeholder="Enter title for your post.."
+                h="30px"
+                m="5px"
+                value={postContent.title}
+                onChange={(e) =>
+                  setPostContent({ ...postContent, title: e.target.value })
+                }
+              />
+              <Textarea
+              value={postContent.content}
+                placeholder="Enter content.."
                 h="150px"
                 m="5px"
+                onChange={(e) =>
+                  setPostContent({ ...postContent, content: e.target.value })
+                }
               />
               <Flex justifyContent="space-between">
                 <Icon fontSize="3xl" as={MdImage} m="5px" />
-                <Button bg="brand.100" m="10px">
+                <Button bg="brand.100" m="10px" onClick={submitPost}>
                   Post
                 </Button>
               </Flex>
             </Flex>
+            <Flex flexDirection="column">
+         {sortedPosts.map(post=>{
+            return(
+              <PostCard post={post} userDetails={user}/>
+            )
+          })}
+         </Flex>
           </Flex>
+         
         </GridItem>
         <SuggestionsBar />
       </Grid>
+     
     </>
   );
 };
