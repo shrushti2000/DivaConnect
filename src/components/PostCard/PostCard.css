@@ -5,3 +5,7 @@
 .post-title{
     font-weight: 900;
 }
+.editCommentinput:focus{
+    outline: none;
+    border: none;
+}
