@@ -51,15 +51,19 @@ const SuggestionsBar = () => {
               userSuggestions.map((newuser) => {
                 return (
                   <>
-                    <Flex m="10px">
-                      <Avatar
+                    <Flex m="10px" w="250px" justifyContent="space-between">
+                     <Flex>
+                     <Avatar
                         name="Dan Abrahmov"
                         src="https://bit.ly/dan-abramov"
+                        size="md"
+                        my="auto"
                       />
                       <Flex flexDirection="column" m="5px">
-                        <Text fontSize="xl">{newuser.firstName} {newuser.lastName}</Text>
+                        <Text fontSize="lg">{newuser.firstName} {newuser.lastName}</Text>
                         <Text fontSize="xs">@{newuser.username}</Text>
                       </Flex>
+                     </Flex>
                       <Button
                         bg="brand.100"
                         size="sm"
