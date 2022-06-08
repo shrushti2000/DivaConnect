@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import { loginUserService, signupUserService } from '../Services/authService'
+import { updateUserService } from "../Services/userService"
 
 const initialState={
     token:localStorage.getItem("token") ?? "",
@@ -29,6 +30,16 @@ export const signupUser=createAsyncThunk(
         }
     }
 )
+
+export const updateUser=createAsyncThunk("auth/updateUser",async(userData,thunkAPI)=>{
+    try{
+        const token=localStorage.getItem('token')
+        const response=await updateUserService(token,userData)
+        return response.data.user;
+    }catch(error){
+        return thunkAPI.rejectWithValue(error)
+    }
+})
 
 const authenticationSlice=createSlice({
     name:"authentication",
@@ -69,6 +80,18 @@ const authenticationSlice=createSlice({
             localStorage.setItem('user',JSON.stringify(state.user))
         },
         [signupUser.rejected]:(state,action)=>{
+            state.authStatus="error";
+            state.error=action.payload;
+        },
+        [updateUser.pending]:(state)=>{
+            state.authStatus="pending"
+        },
+        [updateUser.fulfilled]:(state,action)=>{
+            state.authStatus="fulfilled";
+            state.user=action.payload;
+            localStorage.setItem('user',JSON.stringify(state.user))
+        },
+        [updateUser.rejected]:(state,action)=>{
             state.authStatus="error";
             state.error=action.payload;
         }

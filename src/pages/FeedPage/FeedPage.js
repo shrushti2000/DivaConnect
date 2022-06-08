@@ -7,14 +7,18 @@ import {
   Text,
   Textarea,
   useToast,
-  
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Icon } from "@chakra-ui/react";
 import { MdHome, MdExplore, MdPerson, MdFeed, MdImage } from "react-icons/md";
 import "./FeedPage.css";
-import { EditPostModal, Sidebar, SuggestionsBar,Toast } from "../../components";
+import {
+  EditPostModal,
+  Sidebar,
+  SuggestionsBar,
+  Toast,
+} from "../../components";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addUserPost,
@@ -26,47 +30,47 @@ import { PostCard } from "../../components/PostCard/PostCard";
 const FeedPage = () => {
   const { userPosts } = useSelector((state) => state.post);
   const { user } = useSelector((state) => state.authentication);
-  const [showToast,setShowToast]=useState(false)
+  const [showToast, setShowToast] = useState(false);
   const dispatch = useDispatch();
   const [postContent, setPostContent] = useState({
-    title:'',
+    title: "",
     content: "",
     username: user.username,
+    comments: [],
   });
   console.log(userPosts);
   useEffect(() => {
     dispatch(getUserPost(user.username));
   }, [userPosts]);
-const toast=useToast()
+  const toast = useToast();
   const submitPost = () => {
-    if (postContent.textContent !== "" && postContent.title!=='' ) {
+    if (postContent.textContent !== "" && postContent.title !== "") {
       dispatch(addUserPost(postContent));
       toast({
         title: `Post added succesfully`,
-        status:'success',
-        position: 'top',
+        status: "success",
+        position: "top",
         isClosable: true,
-      })
-      setPostContent({...postContent,title:'',content:''})
-    }else{
+      });
+      setPostContent({ ...postContent, title: "", content: "" });
+    } else {
       toast({
         title: `Please enter all the content`,
-        status:'error',
-        position: 'top',
+        status: "error",
+        position: "top",
         isClosable: true,
-      })
+      });
     }
   };
-  const getSortedPosts=()=>{
-    return [...userPosts].sort(function(a,b){
-      return new Date(b['createdAt']) - new Date(a['createdAt']);
-    })
-  }
-  const sortedPosts=getSortedPosts()
-  console.log(sortedPosts)
+  const getSortedPosts = () => {
+    return [...userPosts].sort(function (a, b) {
+      return new Date(b["createdAt"]) - new Date(a["createdAt"]);
+    });
+  };
+  const sortedPosts = getSortedPosts();
+  console.log(sortedPosts);
   return (
     <>
-  
       <Grid templateColumns="repeat(5,1fr)" gap={1}>
         <Sidebar />
         <GridItem w="100%" colSpan={3}>
@@ -98,7 +102,7 @@ const toast=useToast()
                 }
               />
               <Textarea
-              value={postContent.content}
+                value={postContent.content}
                 placeholder="Enter content.."
                 h="150px"
                 m="5px"
@@ -114,18 +118,14 @@ const toast=useToast()
               </Flex>
             </Flex>
             <Flex flexDirection="column">
-         {sortedPosts.map(post=>{
-            return(
-              <PostCard post={post} userDetails={user}/>
-            )
-          })}
-         </Flex>
+              {sortedPosts.map((post) => {
+                return <PostCard post={post} userDetails={user} />;
+              })}
+            </Flex>
           </Flex>
-         
         </GridItem>
         <SuggestionsBar />
       </Grid>
-     
     </>
   );
 };

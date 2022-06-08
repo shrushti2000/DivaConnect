@@ -15,3 +15,4 @@ export const signupUserService = (email, password, firstName, lastName) => {
     lastName: lastName,
   });
 };
+
