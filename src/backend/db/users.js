@@ -12,6 +12,8 @@ export const users = [
     lastName: "Balika",
     username: "adarshbalika",
     password: "adarshBalika123",
+    bio:"Creating a life, I love! Lets talk about fashion,makeup and styling!",
+    sociallink:"https://github.com/shrushti2000",
     createdAt: formatDate(),
     updatedAt: formatDate(),
   },
