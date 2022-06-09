@@ -61,7 +61,7 @@ const FeedPage = () => {
 
   useEffect(() => {
     if (allPosts) {
-      setFeedPosts(
+      setFeedPosts( 
         allPosts
           ?.filter(
             (post) =>
@@ -152,10 +152,10 @@ const FeedPage = () => {
               </Flex>
             </Flex>
             <Flex flexDirection="column">
-              {feedPosts.map((post) => {
+              {feedPosts.length !==0 ?feedPosts.map((post) => {
                 const userDetails=allUsers?.find(user=>user?.username===post?.username)
-                return <PostCard post={post} userDetails={userDetails} />;
-              })}
+                return (<PostCard post={post} userDetails={userDetails} />);
+              }) : <></>}
             </Flex>
           </Flex>
         </GridItem>
