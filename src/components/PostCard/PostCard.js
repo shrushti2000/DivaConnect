@@ -38,8 +38,8 @@ import {
 } from "../../features/postSlice";
 import { useDispatch, useSelector } from "react-redux";
 
-const PostCard = ({ post, userDetails }) => {
-  
+const PostCard = ({ post }) => {
+  const {allUsers}=useSelector(state=>state.user)
   const { user } = useSelector((state) => state.authentication);
   const dispatch = useDispatch();
   const [showEditCommentInput, setShowEditCommentInput] = useState(false);
@@ -64,6 +64,7 @@ const PostCard = ({ post, userDetails }) => {
     createdAt,
   } = post;
   const isPostLiked = likedBy?.some((like) => like.username === user.username);
+  const userDetails = allUsers && allUsers?.find((user) => user.username === username);
   const deletePostHandler = () => {
     dispatch(deleteUserPost(post._id));
   };

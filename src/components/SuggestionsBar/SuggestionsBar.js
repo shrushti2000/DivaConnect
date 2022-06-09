@@ -10,8 +10,10 @@ import {
 } from "@chakra-ui/react";
 import { useDispatch, useSelector } from "react-redux";
 import { followUnfollowUser, getAllUser } from "../../features/userSlice";
+import { useNavigate } from "react-router-dom";
 
 const SuggestionsBar = () => {
+  const navigate=useNavigate()
   const { user } = useSelector((state) => state.authentication);
   const { allUsers } = useSelector((state) => state.user);
   const [userSuggestions, setUserSuggestions] = useState([]);
@@ -35,6 +37,10 @@ const SuggestionsBar = () => {
       })
     );
   };
+ 
+  const openSuggestedUserProfile=(userId)=>{
+    navigate(`/user-profile/${userId}`)
+  }
   return (
     allUsers.length > 0 && (
       <>
@@ -60,7 +66,7 @@ const SuggestionsBar = () => {
                         my="auto"
                       />
                       <Flex flexDirection="column" m="5px">
-                        <Text fontSize="lg">{newuser.firstName} {newuser.lastName}</Text>
+                        <Text fontSize="lg" onClick={()=>openSuggestedUserProfile(newuser._id)} cursor="pointer">{newuser.firstName} {newuser.lastName}</Text>
                         <Text fontSize="xs">@{newuser.username}</Text>
                       </Flex>
                      </Flex>

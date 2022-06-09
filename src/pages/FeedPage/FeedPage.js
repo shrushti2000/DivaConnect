@@ -32,6 +32,9 @@ const FeedPage = () => {
   const { user } = useSelector((state) => state.authentication);
   const [showToast, setShowToast] = useState(false);
   const dispatch = useDispatch();
+  const {allUsers}=useSelector(state=>state.user)
+  const {allPosts}=useSelector(state=>state.post)
+  const [feedPosts,setFeedPosts]=useState([])
   const [postContent, setPostContent] = useState({
     title: "",
     content: "",
@@ -39,6 +42,19 @@ const FeedPage = () => {
     comments: [],
   });
   console.log(userPosts);
+  useEffect(() => {
+    if (allPosts) {
+      setFeedPosts( 
+        allPosts
+          ?.filter(
+            (post) =>
+              post?.username === user?.username ||
+              user?.following?.find((ele) => post?.username === ele?.username)
+          )
+          .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+      );
+    }
+  }, [user, allPosts]);
   useEffect(() => {
     dispatch(getUserPost(user.username));
   }, [userPosts]);
@@ -63,10 +79,15 @@ const FeedPage = () => {
     }
   };
   const getSortedPosts = () => {
-    return [...userPosts].sort(function (a, b) {
-      return new Date(b["createdAt"]) - new Date(a["createdAt"]);
-    });
-  };
+   return(  allPosts
+    ?.filter(
+      (post) =>
+        post?.username === user?.username ||
+        user?.following?.find((ele) => post?.username === ele?.username)
+    )
+    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+    )};
+  
   const sortedPosts = getSortedPosts();
   console.log(sortedPosts);
   return (
@@ -119,7 +140,7 @@ const FeedPage = () => {
             </Flex>
             <Flex flexDirection="column">
               {sortedPosts.map((post) => {
-                return <PostCard post={post} userDetails={user} />;
+                return <PostCard post={post}  />;
               })}
             </Flex>
           </Flex>
