@@ -171,8 +171,8 @@ const postSlice = createSlice({
       state.postStatus = "pending";
     },
     [getAllPosts.fulfilled]: (state, action) => {
-      postSlice.postStatus = "fulfilled";
-      state.allPosts = action.payload;
+      state.postStatus = "fulfilled";
+      state.allPosts = action.payload.posts;
     },
     [getAllPosts.rejected]: (state, action) => {
       state.postStatus = "rejected";

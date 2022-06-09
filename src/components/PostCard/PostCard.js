@@ -38,8 +38,10 @@ import {
 } from "../../features/postSlice";
 import { useDispatch, useSelector } from "react-redux";
 
-const PostCard = ({ post, userDetails }) => {
-  
+const PostCard = ({ post ,userDetails}) => {
+  const { allUsers } = useSelector((state) => state.user);
+  // const userDetails=allUsers?.find(user=>user?.username===post?.username)
+  // console.log(userDetails)
   const { user } = useSelector((state) => state.authentication);
   const dispatch = useDispatch();
   const [showEditCommentInput, setShowEditCommentInput] = useState(false);

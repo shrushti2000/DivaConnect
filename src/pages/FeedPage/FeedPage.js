@@ -28,20 +28,54 @@ import {
 import { PostCard } from "../../components/PostCard/PostCard";
 
 const FeedPage = () => {
+  const { allPosts } = useSelector((state) => state.post);
+  console.log(allPosts)
+  const { allUsers } = useSelector((state) => state.user);
   const { userPosts } = useSelector((state) => state.post);
   const { user } = useSelector((state) => state.authentication);
   const [showToast, setShowToast] = useState(false);
   const dispatch = useDispatch();
+  const [feedPosts,setFeedPosts]=useState([])
   const [postContent, setPostContent] = useState({
     title: "",
     content: "",
     username: user.username,
     comments: [],
   });
-  console.log(userPosts);
+ 
+  
+  // useEffect(() => {
+    
+  //     setFeedPosts(
+  //       allPosts.filter(
+  //           (post) =>
+  //               post?.username === user?.username ||
+  //               user?.following?.find((ele) => post?.username === ele?.username)
+             
+              
+  //         )
+  //         .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+  //     );
+    
+  // }, [user, allPosts]);
+
   useEffect(() => {
-    dispatch(getUserPost(user.username));
-  }, [userPosts]);
+    if (allPosts) {
+      setFeedPosts(
+        allPosts
+          ?.filter(
+            (post) =>
+              post?.username === user?.username ||
+              user?.following?.find((ele) => post?.username === ele?.username)
+          )
+          .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+      );
+    }
+  }, [user, allPosts]);
+  
+  // useEffect(() => {
+  //   dispatch(getUserPost(user.username));
+  // }, [allPosts]);
   const toast = useToast();
   const submitPost = () => {
     if (postContent.textContent !== "" && postContent.title !== "") {
@@ -62,13 +96,13 @@ const FeedPage = () => {
       });
     }
   };
-  const getSortedPosts = () => {
-    return [...userPosts].sort(function (a, b) {
-      return new Date(b["createdAt"]) - new Date(a["createdAt"]);
-    });
-  };
-  const sortedPosts = getSortedPosts();
-  console.log(sortedPosts);
+  // const getSortedPosts = () => {
+  //   return [...feedPosts].sort(function (a, b) {
+  //     return new Date(b["createdAt"]) - new Date(a["createdAt"]);
+  //   });
+  // };
+  // const sortedPosts = getSortedPosts();
+
   return (
     <>
       <Grid templateColumns="repeat(5,1fr)" gap={1}>
@@ -118,8 +152,9 @@ const FeedPage = () => {
               </Flex>
             </Flex>
             <Flex flexDirection="column">
-              {sortedPosts.map((post) => {
-                return <PostCard post={post} userDetails={user} />;
+              {feedPosts.map((post) => {
+                const userDetails=allUsers?.find(user=>user?.username===post?.username)
+                return <PostCard post={post} userDetails={userDetails} />;
               })}
             </Flex>
           </Flex>
