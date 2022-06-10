@@ -62,8 +62,7 @@ const FeedPage = () => {
   useEffect(() => {
     if (allPosts) {
       setFeedPosts( 
-        allPosts
-          ?.filter(
+        allPosts.filter(
             (post) =>
               post?.username === user?.username ||
               user?.following?.find((ele) => post?.username === ele?.username)

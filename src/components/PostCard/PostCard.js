@@ -58,7 +58,7 @@ const PostCard = ({ post ,userDetails}) => {
     if (commentTobBeEdited) {
       setNewComment(commentTobBeEdited?.text || "");
     }
-  }, [commentTobBeEdited]);
+  }, [commentTobBeEdited,allPosts]);
   
   const {
     _id,
