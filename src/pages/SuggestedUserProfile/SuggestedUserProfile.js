@@ -33,11 +33,11 @@ import { getUserPost } from "../../features/postSlice";
   // const suggestedUserPosts=allPosts.filter(post=>post.username===findUser.username)
   // console.log(suggestedUserPosts)
   
-  //  useEffect(()=>{
-  //     if(allPosts){
-  //       setSuggestedUserPosts(allPosts?.filter(post=>post?.username===findUser?.username))
-  //     }
-  //  },[user,allPosts,username,findUser])
+   useEffect(()=>{
+      if(allPosts){
+        setSuggestedUserPosts(allPosts?.filter(post=>post?.username===findUser?.username))
+      }
+   },[user,allPosts,username,findUser])
    const dispatch=useDispatch()
    useEffect(() => {
     dispatch(getUserPost(username));
@@ -88,7 +88,7 @@ import { getUserPost } from "../../features/postSlice";
                 <EditUserProfileModal />
               </Flex>
               <Flex flexDirection="column">
-                {userPosts.map((post) => {
+                {suggestedUserPosts.map((post) => {
                   return <PostCard post={post} userDetails={suggestedUser} />;
                 })}
               </Flex>
