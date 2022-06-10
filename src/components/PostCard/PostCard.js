@@ -33,13 +33,17 @@ import {
   deleteComment,
   deleteUserPost,
   editComment,
+  getAllPosts,
+  getUserPost,
   likeAndDislikePost,
   setPostToBeEdited,
 } from "../../features/postSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { getAllUser } from "../../features/userSlice";
 
 const PostCard = ({ post ,userDetails}) => {
   const { allUsers } = useSelector((state) => state.user);
+  const { allPosts } = useSelector((state) => state.post);
   // const userDetails=allUsers?.find(user=>user?.username===post?.username)
   // console.log(userDetails)
   const { user } = useSelector((state) => state.authentication);
@@ -99,6 +103,7 @@ const PostCard = ({ post ,userDetails}) => {
     );
     setShowEditCommentInput(!showEditCommentInput);
   };
+ 
   return (
     <>
       <Flex flexDirection="column" w="650px" className="postContainer" p="20px">
@@ -125,7 +130,7 @@ const PostCard = ({ post ,userDetails}) => {
                 .join(" ")}`}
             </Text>
           </Flex>
-          <Menu>
+        {user.username ===username && <>  <Menu>
             <MenuButton
               as={IconButton}
               aria-label="Options"
@@ -136,7 +141,7 @@ const PostCard = ({ post ,userDetails}) => {
               <EditPostModal post={post} />
               <MenuItem onClick={deletePostHandler}>Delete</MenuItem>
             </MenuList>
-          </Menu>
+          </Menu></>}
         </Flex>
         <Text fontSize="3xl" className="post-title">
           {post.title}

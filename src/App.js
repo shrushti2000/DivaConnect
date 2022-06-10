@@ -21,7 +21,7 @@ function App() {
     if(token){
       dispatch(getAllUser())
       dispatch(getAllPosts())
-      dispatch(getUserPost(user.username));
+     
     }
     
     
