@@ -40,6 +40,7 @@ import {
 } from "../../features/postSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllUser } from "../../features/userSlice";
+import { useNavigate } from "react-router-dom";
 
 const PostCard = ({ post, userDetails }) => {
   const { allUsers } = useSelector((state) => state.user);
@@ -103,7 +104,10 @@ const PostCard = ({ post, userDetails }) => {
     );
     setShowEditCommentInput(!showEditCommentInput);
   };
-
+  const navigate=useNavigate()
+  const openSuggestedUserProfile=(username)=>{
+    navigate(`/user-profile/${username}`)
+  }
   return (
     <>
       <Flex flexDirection="column" w="650px" className="postContainer" p="20px">
@@ -116,7 +120,7 @@ const PostCard = ({ post, userDetails }) => {
               src="https://bit.ly/dan-abramov"
             />
             <Flex flexDirection="column">
-              <Text fontSize="xl">
+              <Text fontSize="xl" onClick={()=>openSuggestedUserProfile(userDetails.username)} cursor="pointer">
                 {userDetails.firstName} {userDetails.lastName}
               </Text>
               <Text fontSize="md">@{post.username}</Text>
@@ -127,6 +131,14 @@ const PostCard = ({ post, userDetails }) => {
                 .toDateString()
                 .split(" ")
                 .slice(1, 4)
+                .join(" ")}`}
+            </Text>
+            <Text fontSize="md" m="5px">
+              {" "}
+              {` ${new Date(post.createdAt)
+                .toTimeString()
+                .split(" ")
+                .slice(0, 1)
                 .join(" ")}`}
             </Text>
           </Flex>

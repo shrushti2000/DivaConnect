@@ -44,20 +44,20 @@ const FeedPage = () => {
   });
  
   
-  // useEffect(() => {
+  useEffect(() => {
     
-  //     setFeedPosts(
-  //       allPosts.filter(
-  //           (post) =>
-  //               post?.username === user?.username ||
-  //               user?.following?.find((ele) => post?.username === ele?.username)
+      setFeedPosts(
+        allPosts.filter(
+            (post) =>
+                post?.username === user?.username ||
+                user?.following?.find((ele) => post?.username === ele?.username)
              
               
-  //         )
-  //         .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-  //     );
+          )
+          .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+      );
     
-  // }, [user, allPosts]);
+  }, [user, allPosts]);
 
   useEffect(() => {
     if (allPosts) {
@@ -95,12 +95,7 @@ const FeedPage = () => {
       });
     }
   };
-  // const getSortedPosts = () => {
-  //   return [...feedPosts].sort(function (a, b) {
-  //     return new Date(b["createdAt"]) - new Date(a["createdAt"]);
-  //   });
-  // };
-  // const sortedPosts = getSortedPosts();
+  
 
   return (
     <>

@@ -17,6 +17,7 @@ import { useParams } from "react-router-dom";
     PostCard,
   } from "../../components";
 import { getUserPost } from "../../features/postSlice";
+import { followUnfollowUser } from "../../features/userSlice";
   
   const SuggestedUserProfile = () => {
     
@@ -29,20 +30,20 @@ import { getUserPost } from "../../features/postSlice";
     const [suggestedUser,setSuggestedUser]=useState({})
     useEffect(()=>{
         setSuggestedUser([...allUsers]?.find((user) => user?.username === username));
-    },[user,allUsers, username,allPosts])
-  // const suggestedUserPosts=allPosts.filter(post=>post.username===findUser.username)
-  // console.log(suggestedUserPosts)
+    },[user])
+ 
+ 
   
-  //  useEffect(()=>{
-  //     if(allPosts){
-  //       setSuggestedUserPosts(allPosts?.filter(post=>post?.username===findUser?.username))
-  //     }
-  //  },[user,allPosts,username,findUser])
+   useEffect(()=>{
+      if(allPosts){
+        setSuggestedUserPosts(allPosts?.filter(post=>post?.username===findUser?.username))
+      }
+   },[user,allPosts])
    const dispatch=useDispatch()
    useEffect(() => {
     dispatch(getUserPost(username));
   }, [username, allPosts]);
-   
+   const isFollowedByLoggedInUser=user?.following?.some(user=>user.username===suggestedUser.username)
     console.log(suggestedUser)
     return (
       <>
@@ -85,10 +86,12 @@ import { getUserPost } from "../../features/postSlice";
                     </Link>
                   </Flex>
                 </Flex>
-                <EditUserProfileModal />
+            {
+              isFollowedByLoggedInUser ? <>  <Button color="brand.100" onClick={()=>dispatch(followUnfollowUser({userId:suggestedUser._id,dispatch,isFollow:false}))}>Unfollow</Button></>:<>  <Button color="brand.100" onClick={()=>dispatch(followUnfollowUser({userId:suggestedUser._id,dispatch,isFollow:true}))}>Follow</Button></>
+            }
               </Flex>
               <Flex flexDirection="column">
-                {userPosts.map((post) => {
+                {suggestedUserPosts.map((post) => {
                   return <PostCard post={post} userDetails={suggestedUser} />;
                 })}
               </Flex>
