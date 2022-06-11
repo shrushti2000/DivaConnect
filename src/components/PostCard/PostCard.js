@@ -41,7 +41,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { getAllUser } from "../../features/userSlice";
 
-const PostCard = ({ post ,userDetails}) => {
+const PostCard = ({ post, userDetails }) => {
   const { allUsers } = useSelector((state) => state.user);
   const { allPosts } = useSelector((state) => state.post);
   // const userDetails=allUsers?.find(user=>user?.username===post?.username)
@@ -58,8 +58,8 @@ const PostCard = ({ post ,userDetails}) => {
     if (commentTobBeEdited) {
       setNewComment(commentTobBeEdited?.text || "");
     }
-  }, [commentTobBeEdited,allPosts]);
-  
+  }, [commentTobBeEdited, allPosts]);
+
   const {
     _id,
     content,
@@ -103,7 +103,7 @@ const PostCard = ({ post ,userDetails}) => {
     );
     setShowEditCommentInput(!showEditCommentInput);
   };
- 
+
   return (
     <>
       <Flex flexDirection="column" w="650px" className="postContainer" p="20px">
@@ -130,18 +130,23 @@ const PostCard = ({ post ,userDetails}) => {
                 .join(" ")}`}
             </Text>
           </Flex>
-        {user.username ===username && <>  <Menu>
-            <MenuButton
-              as={IconButton}
-              aria-label="Options"
-              icon={<MdMoreHoriz />}
-              onClick={setPostToEdit}
-            />
-            <MenuList>
-              <EditPostModal post={post} />
-              <MenuItem onClick={deletePostHandler}>Delete</MenuItem>
-            </MenuList>
-          </Menu></>}
+          {user.username === username && (
+            <>
+              {" "}
+              <Menu>
+                <MenuButton
+                  as={IconButton}
+                  aria-label="Options"
+                  icon={<MdMoreHoriz />}
+                  onClick={setPostToEdit}
+                />
+                <MenuList>
+                  <EditPostModal post={post} />
+                  <MenuItem onClick={deletePostHandler}>Delete</MenuItem>
+                </MenuList>
+              </Menu>
+            </>
+          )}
         </Flex>
         <Text fontSize="3xl" className="post-title">
           {post.title}

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const addCommentService = (postId, commentData, token) => {
+export const addCommentService = (postId, commentData, token) => 
   axios.post(
     `/api/comments/add/${postId}`,
     {
@@ -12,9 +12,9 @@ export const addCommentService = (postId, commentData, token) => {
       },
     }
   );
-};
 
-export const editCommentService = (postId, commentId, commentData, token) => {
+
+export const editCommentService = (postId, commentId, commentData, token) => 
   axios.post(
     `/api/comments/edit/${postId}/${commentId}`,
     {
@@ -26,7 +26,7 @@ export const editCommentService = (postId, commentId, commentData, token) => {
       },
     }
   );
-};
+
 
 export const deleteCommentService = (postId, commentId, token) =>
   axios.post(

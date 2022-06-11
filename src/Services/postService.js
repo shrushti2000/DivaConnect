@@ -7,7 +7,7 @@ export const addPostService=(postData,token)=>{
         authorization:token
     }})
 }
-export const editPostService=(postData,token)=>{
+export const editPostService=(postData,token)=>
     axios.post(`/api/posts/edit/${postData._id}`,{
         postData
     },{
@@ -16,28 +16,27 @@ export const editPostService=(postData,token)=>{
         }
     })
 
-}
 
-export const deleteUserPostService=(postId,token)=>{
+
+export const deleteUserPostService=(postId,token)=>
     axios.delete(`/api/posts/${postId}`,{
         headers:{
             authorization:token
         }
     })
-}
 
-export const likePostService=(postId,token)=>{
+
+export const likePostService=(postId,token)=>
     axios.post(`/api/posts/like/${postId}`,{},{
         headers:{
             authorization:token
         }
     })
-}
 
-export const dislikePostService=(postId,token)=>{
+
+export const dislikePostService=(postId,token)=>
     axios.post(`/api/posts/dislike/${postId}`,{},{
         headers:{
             authorization:token
         }
     })
-}
