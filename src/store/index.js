@@ -5,8 +5,9 @@ import userReducer from "../features/userSlice.js"
 import {
   combineReducers,
  
-  getDefaultMiddleware,
+  
 } from '@reduxjs/toolkit';
+
 import {
   persistStore,
   persistReducer,
@@ -23,10 +24,6 @@ export const store = configureStore({
     authentication: authenticationReducer,
     post:postReducer,
     user:userReducer,
-    middleware: getDefaultMiddleware({
-      serializableCheck: {
-        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-      },
-    }),
+   
   },
 });

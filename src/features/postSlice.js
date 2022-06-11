@@ -99,6 +99,7 @@ export const likeAndDislikePost = createAsyncThunk(
       const response = isLike
         ? await likePostService(postId, token)
         : await dislikePostService(postId, token);
+        debugger
       return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -171,8 +172,8 @@ const postSlice = createSlice({
       state.postStatus = "pending";
     },
     [getAllPosts.fulfilled]: (state, action) => {
-      postSlice.postStatus = "fulfilled";
-      state.allPosts = action.payload;
+      state.postStatus = "fulfilled";
+      state.allPosts = action.payload.posts;
     },
     [getAllPosts.rejected]: (state, action) => {
       state.postStatus = "rejected";
@@ -198,6 +199,7 @@ const postSlice = createSlice({
     },
     [addUserPost.rejected]: (state, action) => {
       state.postStatus = "rejected";
+      debugger
       state.allPosts = action.payload;
     },
     [editUserPost.pending]: (state) => {
@@ -227,6 +229,7 @@ const postSlice = createSlice({
     },
     [likeAndDislikePost.fulfilled]: (state, action) => {
       state.postStatus = "fulfilled";
+      debugger
       state.allPosts = action.payload.posts;
     },
     [likeAndDislikePost.rejected]: (state, action) => {

@@ -28,10 +28,11 @@ import {
 import { PostCard } from "../../components/PostCard/PostCard";
 
 const FeedPage = () => {
-  const { userPosts } = useSelector((state) => state.post);
+  const { userPosts ,allPosts} = useSelector((state) => state.post);
   const { user } = useSelector((state) => state.authentication);
   const [showToast, setShowToast] = useState(false);
   const dispatch = useDispatch();
+  const [feedPost, setFeedPost] = useState([]);
   const [postContent, setPostContent] = useState({
     title: "",
     content: "",
@@ -39,9 +40,10 @@ const FeedPage = () => {
     comments: [],
   });
   console.log(userPosts);
-  useEffect(() => {
-    dispatch(getUserPost(user.username));
-  }, [userPosts]);
+ 
+  // useEffect(() => {
+  //   dispatch(getAllPosts());
+  // }, [allPosts]);
   const toast = useToast();
   const submitPost = () => {
     if (postContent.textContent !== "" && postContent.title !== "") {
@@ -62,13 +64,13 @@ const FeedPage = () => {
       });
     }
   };
-  const getSortedPosts = () => {
-    return [...userPosts].sort(function (a, b) {
-      return new Date(b["createdAt"]) - new Date(a["createdAt"]);
-    });
-  };
-  const sortedPosts = getSortedPosts();
-  console.log(sortedPosts);
+  // const getSortedPosts = () => {
+  //   return [...userPosts].sort(function (a, b) {
+  //     return new Date(b["createdAt"]) - new Date(a["createdAt"]);
+  //   });
+  // };
+  // const sortedPosts = getSortedPosts();
+  // console.log(sortedPosts);
   return (
     <>
       <Grid templateColumns="repeat(5,1fr)" gap={1}>
@@ -118,8 +120,8 @@ const FeedPage = () => {
               </Flex>
             </Flex>
             <Flex flexDirection="column">
-              {sortedPosts.map((post) => {
-                return <PostCard post={post} userDetails={user} />;
+              {allPosts.length!==0 && allPosts.map((post) => {
+                return (<PostCard post={post} userDetails={user} />);
               })}
             </Flex>
           </Flex>
