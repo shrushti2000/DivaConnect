@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./PostCard.css";
-import { v4 as uuid } from "uuid";
+
 import {
   MdMoreHoriz,
   MdFavoriteBorder,
@@ -10,6 +10,7 @@ import {
   MdEdit,
   MdDeleteOutline,
   MdOutlineCheck,
+  MdBookmarkBorder,
 } from "react-icons/md";
 import {
   Menu,
@@ -29,6 +30,7 @@ import {
 } from "@chakra-ui/react";
 import { EditPostModal } from "../EditPostModal/EditPostModal";
 import {
+  addAndRemoveBookmark,
   addComment,
   deleteComment,
   deleteUserPost,
@@ -41,34 +43,23 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { getAllUser } from "../../features/userSlice";
 import { useNavigate } from "react-router-dom";
-
 const PostCard = ({ post, userDetails }) => {
-  const { allUsers } = useSelector((state) => state.user);
-  const { allPosts } = useSelector((state) => state.post);
-  // const userDetails=allUsers?.find(user=>user?.username===post?.username)
-  // console.log(userDetails)
+  const { allPosts, bookmarkPosts } = useSelector((state) => state.post);
   const { user } = useSelector((state) => state.authentication);
   const dispatch = useDispatch();
   const [showEditCommentInput, setShowEditCommentInput] = useState(false);
   const [comment, setComment] = useState("");
   const [commentTobBeEdited, setCommentTobBeEdited] = useState({});
   const [newComment, setNewComment] = useState(commentTobBeEdited?.text || "");
-  const [newEditedComment, setNewEditedComment] = useState();
-  console.log(newComment);
   useEffect(() => {
     if (commentTobBeEdited) {
       setNewComment(commentTobBeEdited?.text || "");
     }
   }, [commentTobBeEdited, allPosts]);
-
   const {
-    _id,
-    content,
     username,
     likes: { likeCount, likedBy, dislikedBy },
-    bookmark,
     comments,
-    createdAt,
   } = post;
   const isPostLiked = likedBy?.some((like) => like.username === user.username);
   const deletePostHandler = () => {
@@ -84,7 +75,6 @@ const PostCard = ({ post, userDetails }) => {
         isLike: isPostLiked ? false : true,
       })
     );
-    console.log("like clisked");
   };
   const addCommentHandler = () => {
     dispatch(addComment({ postId: post._id, commentData: comment }));
@@ -104,10 +94,18 @@ const PostCard = ({ post, userDetails }) => {
     );
     setShowEditCommentInput(!showEditCommentInput);
   };
-  const navigate=useNavigate()
-  const openSuggestedUserProfile=(username)=>{
-    navigate(`/user-profile/${username}`)
-  }
+  const navigate = useNavigate();
+  const openSuggestedUserProfile = (username) => {
+    navigate(`/user-profile/${username}`);
+  };
+  const bookMarkPostHandler = (isPostToBeBookmark) => {
+    isPostToBeBookmark
+      ? dispatch(addAndRemoveBookmark({ postId: post._id, isBookmark: true }))
+      : dispatch(addAndRemoveBookmark({ postId: post._id, isBookmark: false }));
+  };
+  const isPostBookmarked = bookmarkPosts?.some(
+    (bookmarkpost) => bookmarkpost === post._id
+  );
   return (
     <>
       <Flex flexDirection="column" w="650px" className="postContainer" p="20px">
@@ -120,7 +118,7 @@ const PostCard = ({ post, userDetails }) => {
               src="https://bit.ly/dan-abramov"
             />
             <Flex flexDirection="column">
-              <Text fontSize="xl" onClick={()=>openSuggestedUserProfile(userDetails.username)} cursor="pointer">
+              <Text fontSize="xl" cursor="pointer">
                 {userDetails.firstName} {userDetails.lastName}
               </Text>
               <Text fontSize="md">@{post.username}</Text>
@@ -191,7 +189,29 @@ const PostCard = ({ post, userDetails }) => {
             {likeCount !== 0 && <Text fontSize="2xl">{likeCount}</Text>}
           </Flex>
           <Flex m="5px">
-            <Icon as={MdBookmark} m="5px" fontSize="2xl" />
+            {isPostBookmarked ? (
+              <>
+                {" "}
+                <Icon
+                  as={MdBookmark}
+                  m="5px"
+                  fontSize="2xl"
+                  cursor="pointer"
+                  onClick={(e) => bookMarkPostHandler(false)}
+                />
+              </>
+            ) : (
+              <>
+                {" "}
+                <Icon
+                  as={MdBookmarkBorder}
+                  m="5px"
+                  fontSize="2xl"
+                  onClick={(e) => bookMarkPostHandler(true)}
+                  cursor="pointer"
+                />
+              </>
+            )}
           </Flex>
           <Flex m="5px">
             <Icon fontSize="2xl" as={MdComment} m="5px" />

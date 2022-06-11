@@ -3,10 +3,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
 import { Header } from "./components";
-import { getAllPosts, getUserPost } from "./features/postSlice";
+import { getAllBokmarkedPosts, getAllPosts, getUserPost } from "./features/postSlice";
 import { getAllUser } from "./features/userSlice";
 import logo from "./logo.png";
 import { FeedPage, UserProfile } from "./pages";
+import { BookmarkPage } from "./pages/BookmarkPage/BookmarkPage";
 import { Landingpage } from "./pages/Landingpage/Landingpage";
 import { Signin } from "./pages/Signin/Signin";
 import { Signup } from "./pages/Signup/Signup";
@@ -21,6 +22,7 @@ function App() {
     if(token){
       dispatch(getAllUser())
       dispatch(getAllPosts())
+      dispatch(getAllBokmarkedPosts())
      dispatch(getUserPost(user.username))
     }
     
@@ -35,6 +37,7 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/feedpage" element={<FeedPage />} />
           <Route path="/profile" element={<UserProfile/>}/>
+          <Route path="/bookmark" element={<BookmarkPage/>}/>
           <Route path="/user-profile/:username" element={<SuggestedUserProfile/>}/>
         </Routes>
       </BrowserRouter>

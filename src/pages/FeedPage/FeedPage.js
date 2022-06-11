@@ -9,60 +9,43 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { Icon } from "@chakra-ui/react";
-import { MdHome, MdExplore, MdPerson, MdFeed, MdImage } from "react-icons/md";
+import { MdImage } from "react-icons/md";
 import "./FeedPage.css";
-import {
-  EditPostModal,
-  Sidebar,
-  SuggestionsBar,
-  Toast,
-} from "../../components";
+import { Sidebar, SuggestionsBar } from "../../components";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  addUserPost,
-  getAllPosts,
-  getUserPost,
-} from "../../features/postSlice";
+import { addUserPost } from "../../features/postSlice";
 import { PostCard } from "../../components/PostCard/PostCard";
 
 const FeedPage = () => {
   const { allPosts } = useSelector((state) => state.post);
-  console.log(allPosts)
+  console.log(allPosts);
   const { allUsers } = useSelector((state) => state.user);
-  const { userPosts } = useSelector((state) => state.post);
   const { user } = useSelector((state) => state.authentication);
-  const [showToast, setShowToast] = useState(false);
   const dispatch = useDispatch();
-  const [feedPosts,setFeedPosts]=useState([])
+  const [feedPosts, setFeedPosts] = useState([]);
   const [postContent, setPostContent] = useState({
     title: "",
     content: "",
     username: user.username,
     comments: [],
   });
- 
-  
   useEffect(() => {
-    
-      setFeedPosts(
-        allPosts.filter(
-            (post) =>
-                post?.username === user?.username ||
-                user?.following?.find((ele) => post?.username === ele?.username)
-             
-              
-          )
-          .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-      );
-    
+    setFeedPosts(
+      allPosts
+        .filter(
+          (post) =>
+            post?.username === user?.username ||
+            user?.following?.find((ele) => post?.username === ele?.username)
+        )
+        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+    );
   }, [user, allPosts]);
-
   useEffect(() => {
     if (allPosts) {
-      setFeedPosts( 
-        allPosts.filter(
+      setFeedPosts(
+        allPosts
+          .filter(
             (post) =>
               post?.username === user?.username ||
               user?.following?.find((ele) => post?.username === ele?.username)
@@ -71,10 +54,6 @@ const FeedPage = () => {
       );
     }
   }, [user, allPosts]);
-  
-  // useEffect(() => {
-  //   dispatch(getUserPost(user.username));
-  // }, [allPosts]);
   const toast = useToast();
   const submitPost = () => {
     if (postContent.textContent !== "" && postContent.title !== "") {
@@ -95,8 +74,6 @@ const FeedPage = () => {
       });
     }
   };
-  
-
   return (
     <>
       <Grid templateColumns="repeat(5,1fr)" gap={1}>
@@ -146,10 +123,16 @@ const FeedPage = () => {
               </Flex>
             </Flex>
             <Flex flexDirection="column">
-              {feedPosts.length !==0 ?feedPosts.map((post) => {
-                const userDetails=allUsers?.find(user=>user?.username===post?.username)
-                return (<PostCard post={post} userDetails={userDetails} />);
-              }) : <></>}
+              {feedPosts.length !== 0 ? (
+                feedPosts.map((post) => {
+                  const userDetails = allUsers?.find(
+                    (user) => user?.username === post?.username
+                  );
+                  return <PostCard post={post} userDetails={userDetails} />;
+                })
+              ) : (
+                <></>
+              )}
             </Flex>
           </Flex>
         </GridItem>
@@ -158,5 +141,4 @@ const FeedPage = () => {
     </>
   );
 };
-
 export { FeedPage };
