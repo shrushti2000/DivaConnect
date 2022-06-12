@@ -1,11 +1,10 @@
-.postContainer{
-    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-    
+.postContainer {
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 }
-.post-title{
-    font-weight: 900;
+.post-title {
+  font-weight: 900;
 }
-.editCommentinput:focus{
-    outline: none;
-    border: none;
+.editCommentinput:focus {
+  outline: none;
+  border: none;
 }

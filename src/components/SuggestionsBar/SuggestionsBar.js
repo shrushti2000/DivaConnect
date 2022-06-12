@@ -1,15 +1,8 @@
 import React, { useEffect, useState } from "react";
-import {
-  Avatar,
-  Button,
-  Flex,
-  Grid,
-  GridItem,
-  Text,
-  Textarea,
-} from "@chakra-ui/react";
+import { Avatar, Button, Flex, GridItem, Text } from "@chakra-ui/react";
 import { useDispatch, useSelector } from "react-redux";
-import { followUnfollowUser, getAllUser } from "../../features/userSlice";
+import { followUnfollowUser } from "../../features/userSlice";
+import { useNavigate } from "react-router-dom";
 
 const SuggestionsBar = () => {
   const { user } = useSelector((state) => state.authentication);
@@ -35,6 +28,10 @@ const SuggestionsBar = () => {
       })
     );
   };
+  const navigate = useNavigate();
+  const openSuggestedUserProfile = (username) => {
+    navigate(`/user-profile/${username}`);
+  };
   return (
     allUsers.length > 0 && (
       <>
@@ -52,18 +49,26 @@ const SuggestionsBar = () => {
                 return (
                   <>
                     <Flex m="10px" w="250px" justifyContent="space-between">
-                     <Flex>
-                     <Avatar
-                        name="Dan Abrahmov"
-                        src="https://bit.ly/dan-abramov"
-                        size="md"
-                        my="auto"
-                      />
-                      <Flex flexDirection="column" m="5px">
-                        <Text fontSize="lg">{newuser.firstName} {newuser.lastName}</Text>
-                        <Text fontSize="xs">@{newuser.username}</Text>
+                      <Flex>
+                        <Avatar
+                          name="Dan Abrahmov"
+                          src="https://bit.ly/dan-abramov"
+                          size="md"
+                          my="auto"
+                        />
+                        <Flex flexDirection="column" m="5px">
+                          <Text
+                            fontSize="lg"
+                            cursor="pointer"
+                            onClick={() =>
+                              openSuggestedUserProfile(newuser.username)
+                            }
+                          >
+                            {newuser.firstName} {newuser.lastName}
+                          </Text>
+                          <Text fontSize="xs">@{newuser.username}</Text>
+                        </Flex>
                       </Flex>
-                     </Flex>
                       <Button
                         bg="brand.100"
                         size="sm"

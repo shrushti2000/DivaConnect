@@ -1,16 +1,9 @@
 import React from "react";
-import {
-  Avatar,
-  Button,
-  Flex,
-  Grid,
-  GridItem,
-  Text,
-  Textarea,
-} from "@chakra-ui/react";
+import { Button, Flex, GridItem, Text } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import { Icon } from "@chakra-ui/react";
 import { MdHome, MdExplore, MdPerson, MdFeed } from "react-icons/md";
+
 const Sidebar = () => {
   return (
     <>
@@ -37,7 +30,7 @@ const Sidebar = () => {
           <Link to="/bookmark">
             <Flex m="10px" p="5px">
               <Icon fontSize="3xl" as={MdFeed} m="5px" />
-              <Text fontSize="2xl">Feed</Text>
+              <Text fontSize="2xl">Bookmark</Text>
             </Flex>
           </Link>
           <Link to="/profile">
@@ -54,5 +47,4 @@ const Sidebar = () => {
     </>
   );
 };
-
 export { Sidebar };

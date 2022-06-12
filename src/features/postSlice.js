@@ -1,5 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import {
+  addBookmarkService,
+  getAllBookmarkService,
+  removeBookmarkService,
+} from "../Services/bookmarkService";
+import {
   addCommentService,
   deleteCommentService,
   editCommentService,
@@ -17,6 +22,7 @@ import {
 const initialState = {
   allPosts: [],
   userPosts: [],
+  bookmarkPosts: [],
   postToBeEdited: {},
 };
 export const setPostToBeEdited = createAsyncThunk(
@@ -152,6 +158,34 @@ export const editComment = createAsyncThunk(
   }
 );
 
+export const addAndRemoveBookmark = createAsyncThunk(
+  "post/addAndRemoveBookmark",
+  async ({ postId, isBookmark }, thunkAPI) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = isBookmark
+        ? await addBookmarkService(postId, token)
+        : await removeBookmarkService(postId, token);
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
+export const getAllBokmarkedPosts = createAsyncThunk(
+  "post/getAllBokmarkedPosts",
+  async (_, thunkAPI) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await getAllBookmarkService(token);
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
 const postSlice = createSlice({
   name: "post",
   initialState,
@@ -171,8 +205,8 @@ const postSlice = createSlice({
       state.postStatus = "pending";
     },
     [getAllPosts.fulfilled]: (state, action) => {
-      postSlice.postStatus = "fulfilled";
-      state.allPosts = action.payload;
+      state.postStatus = "fulfilled";
+      state.allPosts = action.payload.posts;
     },
     [getAllPosts.rejected]: (state, action) => {
       state.postStatus = "rejected";
@@ -265,6 +299,28 @@ const postSlice = createSlice({
     [editComment.rejected]: (state, action) => {
       state.postStatus = "rejected";
       state.allPosts = action.payload;
+    },
+    [addAndRemoveBookmark.pending]: (state) => {
+      state.postStatus = "pending";
+    },
+    [addAndRemoveBookmark.fulfilled]: (state, action) => {
+      state.postStatus = "fulfilled";
+      state.bookmarkPosts = action.payload.bookmarks;
+    },
+    [addAndRemoveBookmark.rejected]: (state, action) => {
+      state.postStatus = "rejected";
+      state.bookmarkPosts = action.payload;
+    },
+    [getAllBokmarkedPosts.pending]: (state) => {
+      state.postStatus = "pending";
+    },
+    [getAllBokmarkedPosts.fulfilled]: (state, action) => {
+      state.postStatus = "fulfilled";
+      state.bookmarkPosts = action.payload.bookmarks;
+    },
+    [getAllBokmarkedPosts.rejected]: (state, action) => {
+      state.postStatus = "rejected";
+      state.bookmarkPosts = action.payload;
     },
   },
 });
