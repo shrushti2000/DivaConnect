@@ -105,7 +105,7 @@ export const getBookmarkPostsHandler = function (schema, request) {
  * send POST Request at /api/users/bookmark/:postId/
  * */
 
-export const bookmarkPostHandler = function (schema, request) {
+ export const bookmarkPostHandler = function (schema, request) {
   const { postId } = request.params;
   const post = schema.posts.findBy({ _id: postId }).attrs;
   const user = requiresAuth.call(this, request);
@@ -148,12 +148,13 @@ export const bookmarkPostHandler = function (schema, request) {
   }
 };
 
+
 /**
- * This handler handles remloving a post from user's bookmarks in the db.
+ * This handler handles adding a post to user's bookmarks in the db.
  * send POST Request at /api/users/remove-bookmark/:postId/
  * */
 
-export const removePostFromBookmarkHandler = function (schema, request) {
+ export const removePostFromBookmarkHandler = function (schema, request) {
   const { postId } = request.params;
   let user = requiresAuth.call(this, request);
   try {
@@ -194,6 +195,7 @@ export const removePostFromBookmarkHandler = function (schema, request) {
   }
 };
 
+
 /**
  * This handler handles follow action.
  * send POST Request at /api/users/follow/:followUserId/
@@ -201,8 +203,8 @@ export const removePostFromBookmarkHandler = function (schema, request) {
 
 export const followUserHandler = function (schema, request) {
   const user = requiresAuth.call(this, request);
-  const { followUserId: followUsername } = request.params;
-  const followUser = schema.users.findBy({ username: followUsername }).attrs;
+  const { followUserId } = request.params;
+  const followUser = schema.users.findBy({ _id: followUserId }).attrs;
   try {
     if (!user) {
       return new Response(
@@ -216,7 +218,7 @@ export const followUserHandler = function (schema, request) {
       );
     }
     const isFollowing = user.following.some(
-      (currUser) => currUser.username === followUser.username
+      (currUser) => currUser._id === followUser._id
     );
 
     if (isFollowing) {
@@ -232,18 +234,17 @@ export const followUserHandler = function (schema, request) {
       followers: [...followUser.followers, { ...user }],
     };
     this.db.users.update(
-      { username: user.username },
+      { _id: user._id },
       { ...updatedUser, updatedAt: formatDate() }
     );
     this.db.users.update(
-      { username: followUser.username },
+      { _id: followUser._id },
       { ...updatedFollowUser, updatedAt: formatDate() }
     );
     return new Response(
       200,
       {},
-      {users:this.db.users}
-      // { user: updatedUser, followUser: updatedFollowUser }
+      { user: updatedUser, followUser: updatedFollowUser }
     );
   } catch (error) {
     return new Response(
@@ -263,8 +264,8 @@ export const followUserHandler = function (schema, request) {
 
 export const unfollowUserHandler = function (schema, request) {
   const user = requiresAuth.call(this, request);
-  const { followUserId: followUsername } = request.params;
-  const followUser = this.db.users.findBy({ username: followUsername });
+  const { followUserId } = request.params;
+  const followUser = this.db.users.findBy({ _id: followUserId });
   try {
     if (!user) {
       return new Response(
@@ -278,7 +279,7 @@ export const unfollowUserHandler = function (schema, request) {
       );
     }
     const isFollowing = user.following.some(
-      (currUser) => currUser.username === followUser.username
+      (currUser) => currUser._id === followUser._id
     );
 
     if (!isFollowing) {
@@ -288,27 +289,27 @@ export const unfollowUserHandler = function (schema, request) {
     const updatedUser = {
       ...user,
       following: user.following.filter(
-        (currUser) => currUser.username !== followUser.username
+        (currUser) => currUser._id !== followUser._id
       ),
     };
     const updatedFollowUser = {
       ...followUser,
       followers: followUser.followers.filter(
-        (currUser) => currUser.username !== user.username
+        (currUser) => currUser._id !== user._id
       ),
     };
     this.db.users.update(
-      { username: user.username },
+      { _id: user._id },
       { ...updatedUser, updatedAt: formatDate() }
     );
     this.db.users.update(
-      { username: followUser.username },
+      { _id: followUser._id },
       { ...updatedFollowUser, updatedAt: formatDate() }
     );
     return new Response(
       200,
       {},
-      { users: this.db.users }
+      { user: updatedUser, followUser: updatedFollowUser }
     );
   } catch (error) {
     return new Response(

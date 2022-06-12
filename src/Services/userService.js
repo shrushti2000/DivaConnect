@@ -17,6 +17,8 @@ export const followUserService=(token,userId)=>
         }
     })
 
+    
+
 export const unfollowUserService=(token,userId)=>
      axios.post(`/api/users/unfollow/${userId}`,{},{
         headers:{

@@ -24,23 +24,17 @@ const FeedPage = () => {
   const { user } = useSelector((state) => state.authentication);
   const dispatch = useDispatch();
   const [feedPosts, setFeedPosts] = useState([]);
+  const [trendingPosts, setTrendingPosts] = useState({
+    istrending: false,
+    posts: [],
+  });
   const [postContent, setPostContent] = useState({
     title: "",
     content: "",
     username: user.username,
     comments: [],
   });
-  useEffect(() => {
-    setFeedPosts(
-      allPosts
-        .filter(
-          (post) =>
-            post?.username === user?.username ||
-            user?.following?.find((ele) => post?.username === ele?.username)
-        )
-        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-    );
-  }, [user, allPosts]);
+
   useEffect(() => {
     if (allPosts) {
       setFeedPosts(
@@ -54,6 +48,20 @@ const FeedPage = () => {
       );
     }
   }, [user, allPosts]);
+  const trendingHandler = () => {
+    setTrendingPosts((prev) => ({ ...prev, istrending: true }));
+    setTrendingPosts((prev) => ({
+      ...prev,
+      posts: [...feedPosts]
+        ?.sort((a, b) => b.likes.likeCount - a.likes.likeCount)
+        ?.filter((post) => post.likes.likeCount > 0),
+    }));
+  };
+
+  const latestHandler = () => {
+    setTrendingPosts((prev) => ({ ...prev, istrending: false }));
+  };
+
   const toast = useToast();
   const submitPost = () => {
     if (postContent.textContent !== "" && postContent.title !== "") {
@@ -122,16 +130,44 @@ const FeedPage = () => {
                 </Button>
               </Flex>
             </Flex>
+            <Flex>
+              <Text cursor="pointer" onClick={() => trendingHandler()}>
+                Trending{" "}
+              </Text>
+              <Text cursor="pointer" onClick={() => latestHandler()}>
+                {" "}
+                Latest{" "}
+              </Text>
+            </Flex>
             <Flex flexDirection="column">
-              {feedPosts.length !== 0 ? (
-                feedPosts.map((post) => {
-                  const userDetails = allUsers?.find(
-                    (user) => user?.username === post?.username
-                  );
-                  return <PostCard post={post} userDetails={userDetails} />;
-                })
+              {trendingPosts.istrending ? (
+                <>
+                  {trendingPosts.posts.length !== 0 ? (
+                    trendingPosts.posts.map((post) => {
+                      const userDetails = allUsers?.find(
+                        (user) => user?.username === post?.username
+                      );
+                      return <PostCard post={post} userDetails={userDetails} />;
+                    })
+                  ) : (
+                    <>
+                      <Text>Start liking posts to see what's trending!</Text>
+                    </>
+                  )}
+                </>
               ) : (
-                <></>
+                <>
+                  {feedPosts.length !== 0 ? (
+                    feedPosts.map((post) => {
+                      const userDetails = allUsers?.find(
+                        (user) => user?.username === post?.username
+                      );
+                      return <PostCard post={post} userDetails={userDetails} />;
+                    })
+                  ) : (
+                    <></>
+                  )}
+                </>
               )}
             </Flex>
           </Flex>
