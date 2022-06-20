@@ -88,6 +88,8 @@ export function makeServer({ environment = "development" } = {}) {
         "/users/unfollow/:followUserId/",
         unfollowUserHandler.bind(this)
       );
+      this.passthrough('https://api.cloudinary.com/**');
+      this.passthrough("https://api.cloudinary.com/v1_1/shrushti23/image/upload/**");
     },
   });
 }

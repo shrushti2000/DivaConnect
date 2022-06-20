@@ -13,11 +13,14 @@ import {
   useToast,
   Input,
   FormLabel,
+  Image,
+  Icon,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
+import { MdCameraAlt } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { updateUser } from "../../features/authenticationSlice";
-
+import "./EditUserProfileModal.css";
 const EditUserProfileModal = () => {
   const { user } = useSelector((state) => state.authentication);
   const { postToBeEdited } = useSelector((state) => state.post);
@@ -28,13 +31,15 @@ const EditUserProfileModal = () => {
   const [newUserDetails, setNewUserDetails] = useState({
     bio: user?.bio || "",
     sociallink: user?.sociallink || "",
+    profilepic: user?.profilepic || "",
     ...user,
   });
   useEffect(() => {
     if (user) {
       setNewUserDetails({
         bio: user?.bio || "",
-        link: user?.link || "",
+        sociallink: user?.sociallink || "",
+        profilepic: user?.profilepic || "https://bit.ly/broken-link",
         ...user,
       });
     }
@@ -58,6 +63,30 @@ const EditUserProfileModal = () => {
       });
     }
   };
+  const [disableSubmit, setDisableSubmit] = useState(false);
+  const uploadImage = async (image) => {
+    setDisableSubmit(true);
+    const data = new FormData();
+    data.append("file", image);
+    data.append("upload_preset", "n5g5eby4");
+    data.append("cloud_name", "shrushti23");
+    await fetch("https://api.cloudinary.com/v1_1/shrushti23/image/upload", {
+      method: "post",
+      body: data,
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setNewUserDetails({ ...newUserDetails, profilepic: data.url });
+        console.log(data.url);
+      })
+
+      .catch((err) => {
+        console.log(err);
+      });
+
+    setDisableSubmit(false);
+  };
+
   return (
     <>
       <Button bg="brand.100" onClick={onOpen}>
@@ -76,6 +105,27 @@ const EditUserProfileModal = () => {
             }}
           />
           <ModalBody>
+            <Image
+              boxSize="150px"
+              borderRadius="50%"
+              objectFit="cover"
+              src={newUserDetails.profilepic}
+              alt="Dan Abramov"
+              className="profilepic"
+            />
+            <label>
+              {" "}
+              <Icon
+                as={MdCameraAlt}
+                className="camera-icon"
+                fontSize="3xl"
+              ></Icon>
+              <Input
+                type="file"
+                visibility="hidden"
+                onChange={(e) => uploadImage(e.target.files[0])}
+              ></Input>
+            </label>
             <FormLabel>Bio</FormLabel>
             <Textarea
               placeholder="Enter bio..."
@@ -99,16 +149,36 @@ const EditUserProfileModal = () => {
                 })
               }
             />
-            <Button
-              bg="brand.200"
-              color="brand.20"
-              mr={3}
-              w="100px"
-              m="5px"
-              onClick={saveNewUserDetails}
-            >
-              Save
-            </Button>
+            {disableSubmit ? (
+              <>
+                {" "}
+                <Button
+                  disabled
+                  bg="brand.200"
+                  color="brand.20"
+                  mr={3}
+                  w="100px"
+                  m="5px"
+                  onClick={saveNewUserDetails}
+                >
+                  Save
+                </Button>
+              </>
+            ) : (
+              <>
+                {" "}
+                <Button
+                  bg="brand.200"
+                  color="brand.20"
+                  mr={3}
+                  w="100px"
+                  m="5px"
+                  onClick={saveNewUserDetails}
+                >
+                  Save
+                </Button>
+              </>
+            )}
           </ModalBody>
         </ModalContent>
       </Modal>
