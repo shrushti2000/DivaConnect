@@ -225,4 +225,4 @@ const FeedPage = () => {
     </>
   );
 };
-export { FeedPage };
+export default FeedPage ;

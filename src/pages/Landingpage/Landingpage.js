@@ -42,4 +42,4 @@ const Landingpage = () => {
   );
 };
 
-export { Landingpage };
+export default Landingpage ;
