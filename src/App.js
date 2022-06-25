@@ -6,7 +6,7 @@ import { Header } from "./components";
 import { getAllBokmarkedPosts, getAllPosts, getUserPost } from "./features/postSlice";
 import { getAllUser } from "./features/userSlice";
 import logo from "./logo.png";
-import { FeedPage, UserProfile } from "./pages";
+import { ExplorePage, FeedPage, UserProfile } from "./pages";
 import { BookmarkPage } from "./pages/BookmarkPage/BookmarkPage";
 import { Landingpage } from "./pages/Landingpage/Landingpage";
 import { Signin } from "./pages/Signin/Signin";
@@ -38,6 +38,7 @@ function App() {
           <Route path="/feedpage" element={<FeedPage />} />
           <Route path="/profile" element={<UserProfile/>}/>
           <Route path="/bookmark" element={<BookmarkPage/>}/>
+          <Route path="/explore" element={<ExplorePage/>}/>
           <Route path="/user-profile/:username" element={<SuggestedUserProfile/>}/>
         </Routes>
       </BrowserRouter>

@@ -27,6 +27,7 @@ import {
   InputRightElement,
   Button,
   InputGroup,
+  Image
 } from "@chakra-ui/react";
 import { EditPostModal } from "../EditPostModal/EditPostModal";
 import {
@@ -115,7 +116,7 @@ const PostCard = ({ post, userDetails }) => {
             <Avatar
               m="5px"
               name="Dan Abrahmov"
-              src="https://bit.ly/dan-abramov"
+              src={userDetails.profilepic}
             />
             <Flex flexDirection="column">
               <Text fontSize="xl" cursor="pointer">
@@ -140,6 +141,7 @@ const PostCard = ({ post, userDetails }) => {
                 .join(" ")}`}
             </Text>
           </Flex>
+         
           {user.username === username && (
             <>
               {" "}
@@ -161,6 +163,13 @@ const PostCard = ({ post, userDetails }) => {
         <Text fontSize="3xl" className="post-title">
           {post.title}
         </Text>
+        <Image
+    boxSize='100%'
+    maxBlockSize="600px"
+    objectFit='100%'
+    src={post.url}
+    alt='Dan Abramov'
+  />
         <Flex>{post.content}</Flex>
         <Flex>
           <Flex m="5px">
@@ -215,7 +224,7 @@ const PostCard = ({ post, userDetails }) => {
           </Flex>
           <Flex m="5px">
             <Icon fontSize="2xl" as={MdComment} m="5px" />
-            <Text fontSize="2xl">2</Text>
+            {post.comments.length!==0 ?<Text fontSize="2xl">{post.comments.length}</Text>:<></>}
           </Flex>
         </Flex>
         <Flex>
@@ -224,7 +233,7 @@ const PostCard = ({ post, userDetails }) => {
               name="Dan Abrahmov"
               size="sm"
               m="5px"
-              src="https://bit.ly/dan-abramov"
+              src={user.profilepic}
             />
             <InputGroup size="md" w="100%" mx="10px">
               <Input

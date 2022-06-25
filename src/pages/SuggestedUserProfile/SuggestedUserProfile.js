@@ -66,7 +66,7 @@ import { followUnfollowUser } from "../../features/userSlice";
                   <Avatar
                     size="2xl"
                     name="Segun Adebayo"
-                    src="https://bit.ly/sage-adebayo"
+                    src={suggestedUser.profilepic}
                   />{" "}
                   <Flex flexDirection="column" mx="20px">
                     <Text fontSize="lg" fontWeight="bold" color="Background.200">

@@ -7,6 +7,7 @@ import {
   Text,
   Textarea,
   useToast,
+  Input,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { Icon } from "@chakra-ui/react";
@@ -32,6 +33,7 @@ const FeedPage = () => {
     title: "",
     content: "",
     username: user.username,
+    url: "",
     comments: [],
   });
 
@@ -62,10 +64,34 @@ const FeedPage = () => {
     setTrendingPosts((prev) => ({ ...prev, istrending: false }));
   };
 
+  const [disableSubmit, setDisableSubmit] = useState(false);
+  const uploadImage = async (image) => {
+    setDisableSubmit(true);
+    const data = new FormData();
+    data.append("file", image);
+    data.append("upload_preset", "n5g5eby4");
+    data.append("cloud_name", "shrushti23");
+    await fetch("https://api.cloudinary.com/v1_1/shrushti23/image/upload", {
+      method: "post",
+      body: data,
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setPostContent({ ...postContent, url: data.url });
+        console.log(data.url);
+      })
+
+      .catch((err) => {
+        console.log(err);
+      });
+
+    setDisableSubmit(false);
+  };
   const toast = useToast();
-  const submitPost = () => {
+  const submitPost = async () => {
     if (postContent.textContent !== "" && postContent.title !== "") {
       dispatch(addUserPost(postContent));
+      console.log("posted");
       toast({
         title: `Post added succesfully`,
         status: "success",
@@ -100,7 +126,7 @@ const FeedPage = () => {
               m="10px"
             >
               <Flex>
-                <Avatar name="Dan Abrahmov" src="https://bit.ly/dan-abramov" />
+                <Avatar src={user.profilepic} />
                 <Text fontSize="xl" m="5px">
                   What's new to share?
                 </Text>
@@ -124,10 +150,32 @@ const FeedPage = () => {
                 }
               />
               <Flex justifyContent="space-between">
-                <Icon fontSize="3xl" as={MdImage} m="5px" />
-                <Button bg="brand.100" m="10px" onClick={submitPost}>
-                  Post
-                </Button>
+                <Input
+                  type="file"
+                  padding="5px"
+                  cursor="pointer"
+                  onChange={(e) => uploadImage(e.target.files[0])}
+                ></Input>{" "}
+                {disableSubmit ? (
+                  <>
+                    {" "}
+                    <Button
+                      disabled
+                      bg="brand.100"
+                      m="10px"
+                      onClick={submitPost}
+                    >
+                      Post
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    {" "}
+                    <Button bg="brand.100" m="10px" onClick={submitPost}>
+                      Post
+                    </Button>
+                  </>
+                )}
               </Flex>
             </Flex>
             <Flex>

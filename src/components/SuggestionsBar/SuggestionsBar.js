@@ -52,7 +52,7 @@ const SuggestionsBar = () => {
                       <Flex>
                         <Avatar
                           name="Dan Abrahmov"
-                          src="https://bit.ly/dan-abramov"
+                          src={newuser.profilepic}
                           size="md"
                           my="auto"
                         />

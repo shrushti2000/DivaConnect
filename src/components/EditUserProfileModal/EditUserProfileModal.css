@@ -1,0 +1,12 @@
+.profilepic {
+  position: relative;
+}
+.camera-icon {
+  position: relative;
+  bottom: 30px;
+  left: 100px;
+  cursor: pointer;
+}
+.camera-icon:hover {
+  opacity: 0.7;
+}
