@@ -57,4 +57,4 @@ const ExplorePage = () => {
     </>
   );
 };
-export default ExplorePage ;
+export { ExplorePage} ;

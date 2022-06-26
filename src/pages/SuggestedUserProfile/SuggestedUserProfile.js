@@ -30,7 +30,7 @@ import { followUnfollowUser } from "../../features/userSlice";
     const [suggestedUser,setSuggestedUser]=useState({})
     useEffect(()=>{
         setSuggestedUser([...allUsers]?.find((user) => user?.username === username));
-    },[user])
+    },[user,username])
  
  
   
@@ -38,12 +38,12 @@ import { followUnfollowUser } from "../../features/userSlice";
       if(allPosts){
         setSuggestedUserPosts(allPosts?.filter(post=>post?.username===findUser?.username))
       }
-   },[user,allPosts])
+   },[user,allPosts,username])
    const dispatch=useDispatch()
    useEffect(() => {
     dispatch(getUserPost(username));
   }, [username, allPosts]);
-   const isFollowedByLoggedInUser=user?.following?.some(user=>user.username===suggestedUser.username)
+   const isFollowedByLoggedInUser=user?.following?.some(user=>user?.username===suggestedUser?.username)
     console.log(suggestedUser)
     return (
       <>
@@ -66,15 +66,15 @@ import { followUnfollowUser } from "../../features/userSlice";
                   <Avatar
                     size="2xl"
                     name="Segun Adebayo"
-                    src={suggestedUser.profilepic}
+                    src={suggestedUser?.profilepic}
                   />{" "}
                   <Flex flexDirection="column" mx="20px">
                     <Text fontSize="lg" fontWeight="bold" color="Background.200">
-                      {suggestedUser.firstName} {suggestedUser.lastName}
+                      {suggestedUser?.firstName} {suggestedUser?.lastName}
                     </Text>
-                    <Text fontSize="md">@{suggestedUser.username}</Text>
+                    <Text fontSize="md">@{suggestedUser?.username}</Text>
                     <Text fontSize="md" my="5px">
-                      {suggestedUser.bio}
+                      {suggestedUser?.bio}
                     </Text>
                     <Flex>
                       {/* <Text mx="10px">{suggestedUser.post.length} Posts</Text>  */}
@@ -82,7 +82,7 @@ import { followUnfollowUser } from "../../features/userSlice";
                       <Text mx="10px">{suggestedUser.following.length} Following</Text> */}
                     </Flex>
                     <Link to="#">
-                      <Text color="brand.100">{suggestedUser.sociallink}</Text>
+                      <Text color="brand.100">{suggestedUser?.sociallink}</Text>
                     </Link>
                   </Flex>
                 </Flex>

@@ -46,6 +46,7 @@ import { getAllUser } from "../../features/userSlice";
 import { useNavigate } from "react-router-dom";
 const PostCard = ({ post, userDetails }) => {
   const { allPosts, bookmarkPosts } = useSelector((state) => state.post);
+  const {allUsers} =useSelector((state)=>state.user)
   const { user } = useSelector((state) => state.authentication);
   const dispatch = useDispatch();
   const [showEditCommentInput, setShowEditCommentInput] = useState(false);
@@ -63,6 +64,7 @@ const PostCard = ({ post, userDetails }) => {
     comments,
   } = post;
   const isPostLiked = likedBy?.some((like) => like.username === user.username);
+  
   const deletePostHandler = () => {
     dispatch(deleteUserPost(post._id));
   };
@@ -116,17 +118,17 @@ const PostCard = ({ post, userDetails }) => {
             <Avatar
               m="5px"
               name="Dan Abrahmov"
-              src={userDetails.profilepic}
+              src={userDetails?.profilepic}
             />
             <Flex flexDirection="column">
-              <Text fontSize="xl" cursor="pointer">
-                {userDetails.firstName} {userDetails.lastName}
+              <Text fontSize="xl" cursor="pointer" onClick={()=>openSuggestedUserProfile(userDetails?.username)}>
+                {userDetails?.firstName} {userDetails?.lastName}
               </Text>
-              <Text fontSize="md">@{post.username}</Text>
+              <Text fontSize="md">@{post?.username}</Text>
             </Flex>
             <Text fontSize="md" m="5px">
               {" "}
-              {` ${new Date(post.createdAt)
+              {` ${new Date(post?.createdAt)
                 .toDateString()
                 .split(" ")
                 .slice(1, 4)
@@ -134,7 +136,7 @@ const PostCard = ({ post, userDetails }) => {
             </Text>
             <Text fontSize="md" m="5px">
               {" "}
-              {` ${new Date(post.createdAt)
+              {` ${new Date(post?.createdAt)
                 .toTimeString()
                 .split(" ")
                 .slice(0, 1)
@@ -261,6 +263,8 @@ const PostCard = ({ post, userDetails }) => {
           {comments.length !== 0 && (
             <>
               {comments.map((comment) => {
+                const profilepicofuser=allUsers.find(user=>user.username===comment.username)
+                
                 return (
                   <Flex
                     flexDirection="row"
@@ -275,11 +279,11 @@ const PostCard = ({ post, userDetails }) => {
                     <Flex>
                       {" "}
                       <Avatar
-                        name="Dan Abrahmov"
+                        alt="userprofile"
                         size="sm"
                         mx="5px"
                         my="auto"
-                        src="https://bit.ly/dan-abramov"
+                        src={profilepicofuser?.profilepic}
                       />
                       <Flex flexDirection="column" width="100%">
                         <Text fontSize="sm" fontWeight="bold" mx="7px">
@@ -315,7 +319,7 @@ const PostCard = ({ post, userDetails }) => {
                         )}
                       </Flex>
                     </Flex>{" "}
-                    {comment.username === userDetails.username && (
+                    {comment.username === user.username && (
                       <Menu>
                         <MenuButton
                           bg="Background.200"

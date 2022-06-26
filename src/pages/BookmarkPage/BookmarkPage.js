@@ -65,5 +65,5 @@ import {
     );
   };
   
-  export default BookmarkPage ;
+  export { BookmarkPage} ;
   

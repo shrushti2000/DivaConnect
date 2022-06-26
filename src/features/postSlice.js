@@ -128,6 +128,7 @@ export const deleteComment = createAsyncThunk(
   "post/deleteComment",
   async ({ postId, commentId }, thunkAPI) => {
     try {
+      console.log("delete comment")
       const token = localStorage.getItem("token");
       const response = await deleteCommentService(postId, commentId, token);
       console.log(response.data);
@@ -153,7 +154,9 @@ export const editComment = createAsyncThunk(
       console.log(response.data);
       return response.data;
     } catch (error) {
+      console.log(error)
       return thunkAPI.rejectWithValue(error);
+    
     }
   }
 );

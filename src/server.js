@@ -25,7 +25,15 @@ import {
   unfollowUserHandler,
   editUserHandler,
 } from "./backend/controllers/UserController";
-import { addPostCommentHandler } from "./backend/controllers/CommentsController";
+
+import {
+  getPostCommentsHandler,
+  addPostCommentHandler,
+  editPostCommentHandler,
+  deletePostCommentHandler,
+  upvotePostCommentHandler,
+  downvotePostCommentHandler,
+} from "./backend/controllers/CommentsController";
 export function makeServer({ environment = "development" } = {}) {
   return new Server({
     serializers: {
@@ -70,6 +78,10 @@ export function makeServer({ environment = "development" } = {}) {
       this.post("/posts/like/:postId", likePostHandler.bind(this));
       this.post("/posts/dislike/:postId", dislikePostHandler.bind(this));
       this.post("/comments/add/:postId", addPostCommentHandler.bind(this));
+      this.post("/comments/edit/:postId/:commentId", editPostCommentHandler.bind(this));
+      this.post("/comments/delete/:postId/:commentId", deletePostCommentHandler.bind(this));
+      this.post("/comments/upvote/:postId/:commentId", upvotePostCommentHandler.bind(this));
+      this.post("/comments/downvote/:postId/:commentId", downvotePostCommentHandler.bind(this));
 
       // user routes (public)
       this.get("/users", getAllUsersHandler.bind(this));

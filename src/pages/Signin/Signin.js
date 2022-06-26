@@ -98,4 +98,4 @@ const Signin = () => {
   );
 };
 
-export default Signin ;
+export { Signin} ;
