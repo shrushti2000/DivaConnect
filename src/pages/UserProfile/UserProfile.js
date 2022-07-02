@@ -9,10 +9,10 @@ import {
 } from "../../components";
 
 const UserProfile = () => {
-  const { userPosts } = useSelector((state) => state.post);
+  const { userPosts,allPosts } = useSelector((state) => state.post);
   const { user } = useSelector((state) => state.authentication);
   const getSortedPosts = () => {
-    return [...userPosts].sort(function (a, b) {
+    return [...allPosts].filter(post=>post.username===user.username).sort(function (a, b) {
       return new Date(b["createdAt"]) - new Date(a["createdAt"]);
     });
   };

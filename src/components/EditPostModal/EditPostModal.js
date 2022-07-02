@@ -16,7 +16,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { editUserPost } from "../../features/postSlice";
 
-const EditPostModal = ({ post }) => {
+const EditPostModal = () => {
   const { postToBeEdited } = useSelector((state) => state.post);
   const { isOpen, onClose, onOpen } = useDisclosure();
   const dispatch = useDispatch();

@@ -155,7 +155,7 @@ const PostCard = ({ post, userDetails }) => {
                   onClick={setPostToEdit}
                 />
                 <MenuList>
-                  <EditPostModal post={post} />
+                  <EditPostModal  />
                   <MenuItem onClick={deletePostHandler}>Delete</MenuItem>
                 </MenuList>
               </Menu>
