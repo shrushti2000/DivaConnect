@@ -3,8 +3,8 @@
 }
 .camera-icon {
   position: relative;
-  bottom: 30px;
-  left: 100px;
+  top: 120px;
+  right: 50px;
   cursor: pointer;
 }
 .camera-icon:hover {

@@ -1,13 +1,14 @@
-import {  Button, Flex, Heading, Input, Text } from "@chakra-ui/react";
+import { Button, Flex, Heading, Input, Text } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { loginUser } from "../../features/authenticationSlice";
 
 const Signin = () => {
- 
+  const {  token } = useSelector((state) => state.authentication);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
   const [userCredentials, setUserCredentials] = useState({
     username: "",
     password: "",
@@ -20,15 +21,19 @@ const Signin = () => {
         password: "adarshBalika123",
       })
     );
-    navigate("/feedpage");
   };
+  console.log(location);
+  const from = location.state?.from?.pathname || "/feedpage";
+  useEffect(() => {
+    if (token) {
+      navigate(from, { replace: true });
+    }
+  }, [token]);
 
   const signinHandler = () => {
     if (userCredentials.username && userCredentials.password !== "") {
       dispatch(loginUser(userCredentials));
-    
     }
-     navigate("/feedpage");
   };
 
   return (
@@ -62,6 +67,7 @@ const Signin = () => {
           <Input
             m="10px"
             placeholder="enter password..."
+            type="password"
             size="md"
             value={userCredentials.password}
             onChange={(e) =>
@@ -98,4 +104,4 @@ const Signin = () => {
   );
 };
 
-export { Signin} ;
+export { Signin };

@@ -1,12 +1,4 @@
-import {
-  Flex,
-  Grid,
-  Text,
-  GridItem,
-  Link,
-  Avatar,
-  Button,
-} from "@chakra-ui/react";
+import { Flex, Grid, Text, GridItem, Link, Avatar } from "@chakra-ui/react";
 import React from "react";
 import { useSelector } from "react-redux";
 import {
@@ -25,6 +17,7 @@ const UserProfile = () => {
     });
   };
   const sortedPosts = getSortedPosts();
+
   return (
     <>
       <Grid templateColumns="repeat(5,1fr)" gap={1}>
@@ -43,11 +36,7 @@ const UserProfile = () => {
               p="30px"
             >
               <Flex>
-                <Avatar
-                  size="2xl"
-                 
-                  src={user.profilepic}
-                />{" "}
+                <Avatar size="2xl" src={user.profilepic} />{" "}
                 <Flex flexDirection="column" mx="20px">
                   <Text fontSize="lg" fontWeight="bold" color="Background.200">
                     {user.firstName} {user.lastName}
@@ -70,7 +59,9 @@ const UserProfile = () => {
             </Flex>
             <Flex flexDirection="column">
               {sortedPosts.map((post) => {
-                return <PostCard post={post} userDetails={user} />;
+                return (
+                  <PostCard key={post._id} post={post} userDetails={user} />
+                );
               })}
             </Flex>
           </Flex>

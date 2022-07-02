@@ -1,0 +1,7 @@
+.sidebar-item{
+    color: var(--secondary-bg-color);
+}
+.sidebar-item:hover{
+    background-color: var(--primary-bg-color);
+    border-radius: 10px;
+}

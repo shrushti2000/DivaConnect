@@ -1,20 +1,17 @@
-import { Spinner } from "@chakra-ui/react";
-import React, { Suspense, lazy, Profiler, useEffect } from "react";
-
+import { Text } from "@chakra-ui/react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
-import { Header } from "./components";
 import {
   getAllBokmarkedPosts,
   getAllPosts,
   getUserPost,
 } from "./features/postSlice";
 import { getAllUser } from "./features/userSlice";
-import logo from "./logo.png";
 import { ExplorePage, FeedPage, UserProfile } from "./pages";
 import { BookmarkPage } from "./pages/BookmarkPage/BookmarkPage";
- import { Landingpage } from "./pages/Landingpage/Landingpage";
+import { Landingpage } from "./pages/Landingpage/Landingpage";
 import { Signin } from "./pages/Signin/Signin";
 import { Signup } from "./pages/Signup/Signup";
 import { SuggestedUserProfile } from "./pages/SuggestedUserProfile/SuggestedUserProfile";
@@ -22,8 +19,6 @@ import { SuggestedUserProfile } from "./pages/SuggestedUserProfile/SuggestedUser
 function App() {
   const { token } = useSelector((state) => state.authentication);
   const dispatch = useDispatch();
-  const { allUsers } = useSelector((state) => state.user);
-  const { allPosts } = useSelector((state) => state.post);
   const { user } = useSelector((state) => state.authentication);
   useEffect(() => {
     if (token) {
@@ -33,6 +28,7 @@ function App() {
       dispatch(getUserPost(user.username));
     }
   }, [token]);
+
   return (
     <>
       <BrowserRouter>
@@ -47,6 +43,16 @@ function App() {
           <Route
             path="/user-profile/:username"
             element={<SuggestedUserProfile />}
+          />
+          <Route
+            path="*"
+            element={
+              <>
+                <Text fontSize="4xl" m="20px" textAlign="center">
+                  Sorry! No page found
+                </Text>
+              </>
+            }
           />
         </Routes>
       </BrowserRouter>

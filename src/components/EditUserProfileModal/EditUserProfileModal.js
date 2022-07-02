@@ -15,12 +15,14 @@ import {
   FormLabel,
   Image,
   Icon,
+  Avatar,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { MdCameraAlt } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { updateUser } from "../../features/authenticationSlice";
 import "./EditUserProfileModal.css";
+
 const EditUserProfileModal = () => {
   const { user } = useSelector((state) => state.authentication);
   const { postToBeEdited } = useSelector((state) => state.post);
@@ -86,7 +88,7 @@ const EditUserProfileModal = () => {
 
     setDisableSubmit(false);
   };
-
+  const dummyImage = "https://bit.ly/broken-link";
   return (
     <>
       <Button bg="brand.100" onClick={onOpen}>
@@ -105,14 +107,15 @@ const EditUserProfileModal = () => {
             }}
           />
           <ModalBody>
-            <Image
+            <Avatar
               boxSize="150px"
               borderRadius="50%"
               objectFit="cover"
               src={newUserDetails.profilepic}
-              alt="Dan Abramov"
+              alt="userprofile pic"
               className="profilepic"
             />
+
             <label>
               {" "}
               <Icon

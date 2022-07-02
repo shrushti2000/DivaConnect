@@ -49,7 +49,6 @@ export const getUserPost = createAsyncThunk(
   async (username, thunkAPI) => {
     try {
       const response = await getUserPostService(username);
-      console.log(response);
       return response.data.posts;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -76,7 +75,7 @@ export const deleteUserPost = createAsyncThunk(
     try {
       const token = localStorage.getItem("token");
       const response = await deleteUserPostService(postId, token);
-      return response.data.posts;
+      return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -128,7 +127,7 @@ export const deleteComment = createAsyncThunk(
   "post/deleteComment",
   async ({ postId, commentId }, thunkAPI) => {
     try {
-      console.log("delete comment")
+      console.log("delete comment");
       const token = localStorage.getItem("token");
       const response = await deleteCommentService(postId, commentId, token);
       console.log(response.data);
@@ -154,9 +153,8 @@ export const editComment = createAsyncThunk(
       console.log(response.data);
       return response.data;
     } catch (error) {
-      console.log(error)
+      console.log(error);
       return thunkAPI.rejectWithValue(error);
-    
     }
   }
 );

@@ -1,12 +1,14 @@
 import { Box, Button, Flex, Heading, Input, Text } from "@chakra-ui/react";
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { signupUser } from "../../features/authenticationSlice";
 
 const Signup = () => {
+  const { token } = useSelector((state) => state.authentication);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
   const [userCredentials, setUserCredentials] = useState({
     username: "",
     password: "",
@@ -22,9 +24,15 @@ const Signup = () => {
       userCredentials.lastName !== ""
     ) {
       dispatch(signupUser(userCredentials));
-      navigate("/feedpage");
     }
   };
+  const from = location.state?.from?.pathname || "/feedpage";
+  useEffect(() => {
+    if (token) {
+      navigate(from, { replace: true });
+    }
+  }, [token]);
+
   return (
     <>
       <Flex flexDirection="column" justifyContent="center" alignItems="center">
@@ -89,6 +97,7 @@ const Signup = () => {
             m="10px"
             placeholder="enter password..."
             size="md"
+            type="password"
             value={userCredentials.password}
             onChange={(e) =>
               setUserCredentials({
@@ -115,4 +124,4 @@ const Signup = () => {
   );
 };
 
-export { Signup};
+export { Signup };

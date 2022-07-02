@@ -27,7 +27,7 @@ import {
   InputRightElement,
   Button,
   InputGroup,
-  Image
+  Image,
 } from "@chakra-ui/react";
 import { EditPostModal } from "../EditPostModal/EditPostModal";
 import {
@@ -46,7 +46,7 @@ import { getAllUser } from "../../features/userSlice";
 import { useNavigate } from "react-router-dom";
 const PostCard = ({ post, userDetails }) => {
   const { allPosts, bookmarkPosts } = useSelector((state) => state.post);
-  const {allUsers} =useSelector((state)=>state.user)
+  const { allUsers } = useSelector((state) => state.user);
   const { user } = useSelector((state) => state.authentication);
   const dispatch = useDispatch();
   const [showEditCommentInput, setShowEditCommentInput] = useState(false);
@@ -64,7 +64,7 @@ const PostCard = ({ post, userDetails }) => {
     comments,
   } = post;
   const isPostLiked = likedBy?.some((like) => like.username === user.username);
-  
+
   const deletePostHandler = () => {
     dispatch(deleteUserPost(post._id));
   };
@@ -115,13 +115,13 @@ const PostCard = ({ post, userDetails }) => {
         <Flex justifyContent="space-between" w="600px">
           <Flex>
             {" "}
-            <Avatar
-              m="5px"
-              name="Dan Abrahmov"
-              src={userDetails?.profilepic}
-            />
+            <Avatar m="5px" name="Dan Abrahmov" src={userDetails?.profilepic} />
             <Flex flexDirection="column">
-              <Text fontSize="xl" cursor="pointer" onClick={()=>openSuggestedUserProfile(userDetails?.username)}>
+              <Text
+                fontSize="xl"
+                cursor="pointer"
+                onClick={() => openSuggestedUserProfile(userDetails?.username)}
+              >
                 {userDetails?.firstName} {userDetails?.lastName}
               </Text>
               <Text fontSize="md">@{post?.username}</Text>
@@ -143,7 +143,7 @@ const PostCard = ({ post, userDetails }) => {
                 .join(" ")}`}
             </Text>
           </Flex>
-         
+
           {user.username === username && (
             <>
               {" "}
@@ -166,12 +166,12 @@ const PostCard = ({ post, userDetails }) => {
           {post.title}
         </Text>
         <Image
-    boxSize='100%'
-    maxBlockSize="600px"
-    objectFit='100%'
-    src={post.url}
-    alt='Dan Abramov'
-  />
+          boxSize="100%"
+          maxBlockSize="600px"
+          objectFit="100%"
+          src={post.url}
+          alt="Dan Abramov"
+        />
         <Flex>{post.content}</Flex>
         <Flex>
           <Flex m="5px">
@@ -226,17 +226,16 @@ const PostCard = ({ post, userDetails }) => {
           </Flex>
           <Flex m="5px">
             <Icon fontSize="2xl" as={MdComment} m="5px" />
-            {post.comments.length!==0 ?<Text fontSize="2xl">{post.comments.length}</Text>:<></>}
+            {post.comments.length !== 0 ? (
+              <Text fontSize="2xl">{post.comments.length}</Text>
+            ) : (
+              <></>
+            )}
           </Flex>
         </Flex>
         <Flex>
           <Flex flexDirection="row" w="100%">
-            <Avatar
-              name="Dan Abrahmov"
-              size="sm"
-              m="5px"
-              src={user.profilepic}
-            />
+            <Avatar size="sm" m="5px" src={user?.profilepic} />
             <InputGroup size="md" w="100%" mx="10px">
               <Input
                 pr="4.5rem"
@@ -263,10 +262,13 @@ const PostCard = ({ post, userDetails }) => {
           {comments.length !== 0 && (
             <>
               {comments.map((comment) => {
-                const profilepicofuser=allUsers.find(user=>user.username===comment.username)
-                
+                const profilepicofuser = allUsers.find(
+                  (user) => user.username === comment.username
+                );
+
                 return (
                   <Flex
+                    key={comment._id}
                     flexDirection="row"
                     borderRadius="15px"
                     p="5px"

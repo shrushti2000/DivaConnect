@@ -47,7 +47,7 @@ const SuggestionsBar = () => {
             {userSuggestions.length > 0 &&
               userSuggestions.map((newuser) => {
                 return (
-                  <>
+                  <Flex key={newuser._id}>
                     <Flex m="10px" w="250px" justifyContent="space-between">
                       <Flex>
                         <Avatar
@@ -79,7 +79,7 @@ const SuggestionsBar = () => {
                         + Follow
                       </Button>
                     </Flex>
-                  </>
+                  </Flex>
                 );
               })}
           </Flex>
@@ -88,4 +88,5 @@ const SuggestionsBar = () => {
     )
   );
 };
+
 export { SuggestionsBar };

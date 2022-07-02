@@ -10,8 +10,6 @@ import {
   Input,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
-import { Icon } from "@chakra-ui/react";
-import { MdImage } from "react-icons/md";
 import "./FeedPage.css";
 import { Sidebar, SuggestionsBar } from "../../components";
 import { useDispatch, useSelector } from "react-redux";
@@ -20,7 +18,6 @@ import { PostCard } from "../../components/PostCard/PostCard";
 
 const FeedPage = () => {
   const { allPosts } = useSelector((state) => state.post);
-  console.log(allPosts);
   const { allUsers } = useSelector((state) => state.user);
   const { user } = useSelector((state) => state.authentication);
   const dispatch = useDispatch();
@@ -32,7 +29,7 @@ const FeedPage = () => {
   const [postContent, setPostContent] = useState({
     title: "",
     content: "",
-    username: user.username,
+    username: user?.username || "",
     url: "",
     comments: [],
   });
@@ -78,9 +75,7 @@ const FeedPage = () => {
       .then((res) => res.json())
       .then((data) => {
         setPostContent({ ...postContent, url: data.url });
-        console.log(data.url);
       })
-
       .catch((err) => {
         console.log(err);
       });
@@ -91,7 +86,6 @@ const FeedPage = () => {
   const submitPost = async () => {
     if (postContent.textContent !== "" && postContent.title !== "") {
       dispatch(addUserPost(postContent));
-      console.log("posted");
       toast({
         title: `Post added succesfully`,
         status: "success",
@@ -178,46 +172,108 @@ const FeedPage = () => {
                 )}
               </Flex>
             </Flex>
-            <Flex>
-              <Text cursor="pointer" onClick={() => trendingHandler()}>
+            <Flex my="10px">
+              <Text
+                cursor="pointer"
+                borderRadius="20px 0px 0px 20px"
+                px="70px"
+                onClick={() => trendingHandler()}
+                fontSize="3xl"
+                fontWeight="500"
+                className="trending-text"
+                textDecoration={trendingPosts.istrending ? "underline" : "none"}
+                backgroundColor={
+                  trendingPosts.istrending
+                    ? "var(--secondary-bg-color)"
+                    : "var(--primary-bg-color)"
+                }
+                color={
+                  trendingPosts.istrending
+                    ? "var(--primary-bg-color)"
+                    : "var(--secondary-bg-color)"
+                }
+              >
                 Trending{" "}
               </Text>
-              <Text cursor="pointer" onClick={() => latestHandler()}>
+
+              <Text
+                cursor="pointer"
+                borderRadius="0px 20px 20px 0px"
+                px="70px"
+                onClick={() => latestHandler()}
+                fontSize="3xl"
+                fontWeight="500"
+                className="trending-text"
+                textDecoration={trendingPosts.istrending ? "none" : "underline"}
+                backgroundColor={
+                  trendingPosts.istrending
+                    ? "var(--primary-bg-color)"
+                    : "var(--secondary-bg-color)"
+                }
+                color={
+                  trendingPosts.istrending
+                    ? "var(--secondary-bg-color)"
+                    : "var(--primary-bg-color)"
+                }
+              >
                 {" "}
                 Latest{" "}
               </Text>
             </Flex>
-            <Flex flexDirection="column">
-              {trendingPosts.istrending ? (
-                <>
-                  {trendingPosts.posts.length !== 0 ? (
-                    trendingPosts.posts.map((post) => {
-                      const userDetails = allUsers?.find(
-                        (user) => user?.username === post?.username
-                      );
-                      return <PostCard post={post} userDetails={userDetails} />;
-                    })
+            {feedPosts.length === 0 ? (
+              <>
+                <Text fontSize="3xl">You have not created any posts yet!</Text>
+              </>
+            ) : (
+              <>
+                {" "}
+                <Flex flexDirection="column">
+                  {trendingPosts.istrending ? (
+                    <>
+                      {trendingPosts.posts.length !== 0 ? (
+                        trendingPosts.posts.map((post) => {
+                          const userDetails = allUsers?.find(
+                            (user) => user?.username === post?.username
+                          );
+                          return (
+                            <PostCard
+                              key={post._id}
+                              post={post}
+                              userDetails={userDetails}
+                            />
+                          );
+                        })
+                      ) : (
+                        <>
+                          <Text>
+                            Start liking posts to see what's trending!
+                          </Text>
+                        </>
+                      )}
+                    </>
                   ) : (
                     <>
-                      <Text>Start liking posts to see what's trending!</Text>
+                      {feedPosts.length !== 0 ? (
+                        feedPosts.map((post) => {
+                          const userDetails = allUsers?.find(
+                            (user) => user?.username === post?.username
+                          );
+                          return (
+                            <PostCard
+                              key={post._id}
+                              post={post}
+                              userDetails={userDetails}
+                            />
+                          );
+                        })
+                      ) : (
+                        <></>
+                      )}
                     </>
                   )}
-                </>
-              ) : (
-                <>
-                  {feedPosts.length !== 0 ? (
-                    feedPosts.map((post) => {
-                      const userDetails = allUsers?.find(
-                        (user) => user?.username === post?.username
-                      );
-                      return <PostCard post={post} userDetails={userDetails} />;
-                    })
-                  ) : (
-                    <></>
-                  )}
-                </>
-              )}
-            </Flex>
+                </Flex>
+              </>
+            )}
           </Flex>
         </GridItem>
         <SuggestionsBar />
@@ -225,4 +281,5 @@ const FeedPage = () => {
     </>
   );
 };
-export { FeedPage} ;
+
+export { FeedPage };

@@ -1,5 +1,9 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { followUserService, getAllUserService, unfollowUserService } from "../Services/userService";
+import {
+  followUserService,
+  getAllUserService,
+  unfollowUserService,
+} from "../Services/userService";
 import { updateUser } from "./authenticationSlice";
 
 const initialState = {
@@ -35,7 +39,6 @@ export const followUnfollowUser = createAsyncThunk(
     }
   }
 );
-
 
 const userSlice = createSlice({
   name: "user",
