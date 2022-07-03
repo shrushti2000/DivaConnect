@@ -115,7 +115,7 @@ const PostCard = ({ post, userDetails }) => {
         <Flex justifyContent="space-between" w="600px">
           <Flex>
             {" "}
-            <Avatar m="5px" name="Dan Abrahmov" src={userDetails?.profilepic} />
+            <Avatar m="5px"  src={user?.profilepic} />
             <Flex flexDirection="column">
               <Text
                 fontSize="xl"
