@@ -51,6 +51,8 @@ Diva Connect is a social media application to connect with amazing women around!
 6. Mockbee for backend
 7. Tailwind css for UI.
 
+![GitHub Logo](./Github%20assets/DivaConnectDemo.gif)
+
 ## Show your support
 
 ⭐ this repository if you really like it!
