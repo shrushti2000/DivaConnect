@@ -23,10 +23,10 @@ const Sidebar = () => {
   };
   return (
     <>
-      <GridItem w="100%" minHeight="90vh" colSpan={1}>
+      <GridItem w="50%" minHeight="90vh" colSpan={1}>
         <Flex
           flexDirection="column"
-          w="60%"
+          w="20%"
           justifyContent="center"
           m="40px"
           className="sidebar"
